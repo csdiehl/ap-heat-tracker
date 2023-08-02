@@ -1,15 +1,18 @@
-import React from 'react'
+import React from "react"
+import BaseMap from "../../components/Map"
 
 function HeatTracker() {
   return (
-    <div style={{ paddingBottom: '50%', background: 'linear-gradient(20deg, #9198e5, #00caa0)' }} />
+    <div style={{ height: "700px", width: "100%" }}>
+      <BaseMap />
+    </div>
   )
 }
 
 HeatTracker.visual = {
   headline: "Heat Tracker",
   chatter: "",
-  footerProps: { credit: 'AP Data Team' },
+  footerProps: { credit: "AP Data Team" },
 }
 
 HeatTracker.propTypes = {}
