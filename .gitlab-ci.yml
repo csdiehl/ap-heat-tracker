@@ -1,0 +1,55 @@
+image: associatedpress.jfrog.io/docker-local/interact/nodejs_awscli
+
+stages:
+  - build
+  - preview_deploy
+  - prod_deploy
+  - remove_prod_deploy
+
+default:
+  retry:
+    max: 2
+  tags:
+    - Interactives
+  before_script:
+    - aws configure set region us-east-1
+
+build:
+  stage: build
+  script:
+    - curl -u "$SA_USER:$SA_PASS" https://associatedpress.jfrog.io/artifactory/api/npm/auth > .npmrc
+    - npm config set registry https://associatedpress.jfrog.io/artifactory/api/npm/npm
+    - yarn install --frozen-lockfile
+    - yarn build
+  artifacts:
+    paths:
+      - public/
+      - node_modules/
+
+preview_deploy:
+  stage: preview_deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  variables:
+    KUBERNETES_SERVICE_ACCOUNT_OVERWRITE: datateam-qa-role
+  script:
+    - aws s3 sync public/ s3://$PREVIEW_BUCKET/$CI_PROJECT_NAME/ --sse AES256
+    - node ./bin/akamai_purge.js interactives-qa.ap.org public
+  
+prod_deploy:
+  stage: prod_deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  script:
+    - aws s3 sync public/ s3://$PROJECT_SITE_BUCKET/features/2023/$CI_PROJECT_NAME/ --sse AES256
+    - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/features/2023/$CI_PROJECT_NAME/*"
+    
+remove_prod_deploy:
+  stage: remove_prod_deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  script:
+    - aws s3 rm s3://$PROJECT_SITE_BUCKET/features/2023/$CI_PROJECT_NAME/ --recursive
+    - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/features/2023/$CI_PROJECT_NAME/*"

@@ -1,0 +1,11 @@
+{
+  "extends": "@associatedpress/eslint-config-interact",
+  "globals": {
+    "NODE_ENV": "readonly",
+    "PROJECT_BUILD_TIME": "readonly",
+    "PROJECT_METADATA": "readonly",
+    "PROJECT_BASE_URL": "readonly",
+    "PROJECT_DATA_URL": "readonly",
+    "GOOGLE_ANALYTICS_ID": "readonly"
+  }
+}
