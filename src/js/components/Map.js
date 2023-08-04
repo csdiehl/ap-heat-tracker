@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react"
-import Map from "react-map-gl/maplibre"
+import Map, { Source, Layer } from "react-map-gl/maplibre"
+import { cities } from "./MapStyles"
 
 const initialViewState = {
   latitude: 37.7751,
@@ -24,6 +25,7 @@ async function tempAtStation(id) {
 function BaseMap() {
   const mapRef = useRef()
   const [stations, setStations] = useState(null)
+  const latestTemp = stations && stations[stations.length - 1]
 
   function handleMapClick(event) {
     const { lng, lat } = event?.lngLat
@@ -40,16 +42,26 @@ function BaseMap() {
       .catch((error) => console.log("error", error))
   }
 
-  console.log(stations)
-
   return (
     <>
+      <p>
+        the min temperature is {latestTemp?.TMIN ?? "not found"} and the max is{" "}
+        {latestTemp?.TMAX ?? "not found"}
+      </p>
       <Map
         ref={mapRef}
         initialViewState={initialViewState}
         onClick={handleMapClick}
         mapStyle={`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${styleEnum}?type=style&token=AAPK607d6ebb8ce04a1a9fc5e06c1b80cf4aoVSN2GntWaa8EnGF8MNnFz_3vax7S1HODpwDAlFvelNGDk8JIFYk_Db6OH9ccx-T`}
-      />
+      >
+        <Source
+          id="city-data"
+          type="geojson"
+          data="https://s3.amazonaws.com/data.ap.org/extreme-heat-tracker/world_cities.json"
+        >
+          <Layer {...cities}></Layer>
+        </Source>
+      </Map>
     </>
   )
 }
