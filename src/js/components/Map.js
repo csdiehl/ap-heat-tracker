@@ -1,16 +1,7 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import Map, { Source, Layer } from "react-map-gl/maplibre"
 import { cities } from "./MapStyles"
-
-const initialViewState = {
-  latitude: 37.7751,
-  longitude: -122.4193,
-  zoom: 11,
-  bearing: 0,
-  pitch: 0,
-}
-
-const styleEnum = "ef0fe5a4221944c090fb642fa80c83e7"
+import { citiesLink, tempsLink, initialViewState, styleEnum } from "./settings"
 
 async function tempAtStation(id) {
   if (!id) return "no stations within 5 miles"
@@ -22,10 +13,40 @@ async function tempAtStation(id) {
   return data
 }
 
-function BaseMap() {
+function BaseMap({ setDate }) {
   const mapRef = useRef()
   const [stations, setStations] = useState(null)
-  const latestTemp = stations && stations[stations.length - 1]
+  const [data, setData] = useState(null)
+  // const latestTemp = stations && stations[stations.length - 1]
+
+  useEffect(() => {
+    async function joinTempsToCities() {
+      const res1 = await fetch(citiesLink)
+      const cities = await res1.json()
+      const res2 = await fetch(tempsLink)
+      const temps = await res2.json()
+
+      cities.features.forEach((city) => {
+        const temp = temps.find(
+          (x) =>
+            x.city + x.code === city?.properties?.city + city?.properties?.code
+        )
+
+        city.properties.diff = temp.diff
+      })
+
+      const sorted = temps
+        .filter((d) => d?.date)
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+      const firstDate = sorted[0]?.date,
+        lastDate = sorted.at(-1)?.date
+
+      setData(cities)
+      setDate([lastDate, firstDate])
+    }
+
+    joinTempsToCities()
+  }, [])
 
   function handleMapClick(event) {
     const { lng, lat } = event?.lngLat
@@ -44,21 +65,14 @@ function BaseMap() {
 
   return (
     <>
-      <p>
-        the min temperature is {latestTemp?.TMIN ?? "not found"} and the max is{" "}
-        {latestTemp?.TMAX ?? "not found"}
-      </p>
       <Map
+        attributionControl={false}
         ref={mapRef}
         initialViewState={initialViewState}
         onClick={handleMapClick}
         mapStyle={`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${styleEnum}?type=style&token=AAPK607d6ebb8ce04a1a9fc5e06c1b80cf4aoVSN2GntWaa8EnGF8MNnFz_3vax7S1HODpwDAlFvelNGDk8JIFYk_Db6OH9ccx-T`}
       >
-        <Source
-          id="city-data"
-          type="geojson"
-          data="https://s3.amazonaws.com/data.ap.org/extreme-heat-tracker/world_cities.json"
-        >
+        <Source id="city-data" type="geojson" data={data}>
           <Layer {...cities}></Layer>
         </Source>
       </Map>
