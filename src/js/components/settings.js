@@ -58,3 +58,5 @@ export const Text = styled.h4`
   line-height: 1rem;
   margin: 5px 0px 0px;
 `
+
+export const thisMonth = new Date().toLocaleString("default", { month: "long" })
