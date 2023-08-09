@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react"
-import Map, { Source, Layer, Popup } from "react-map-gl/maplibre"
+import Map, { Source, Layer, Popup } from "react-map-gl"
+import maplibre from "maplibre-gl"
+import "maplibre-gl/dist/maplibre-gl.css"
 import { cities } from "./MapStyles"
 import {
   citiesLink,
@@ -45,6 +47,7 @@ function BaseMap({ setDate }) {
   }, [setDate])
 
   function handleMapClick(event) {
+    if (!event?.features || event.features.length === 0) return
     const data = event?.features[0]?.properties ?? null
     const coords = event?.features[0]?.geometry?.coordinates ?? []
     setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
@@ -55,6 +58,7 @@ function BaseMap({ setDate }) {
   return (
     <>
       <Map
+        mapLib={maplibre}
         attributionControl={false}
         ref={mapRef}
         initialViewState={initialViewState}

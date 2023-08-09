@@ -3,7 +3,6 @@ import BaseMap from "../../components/Map"
 import Legend from "../../components/Legend"
 import styled from "styled-components"
 import { Title, Text } from "../../components/settings"
-import "maplibre-gl/dist/maplibre-gl.css"
 
 const Container = styled.div`
   height: 700px;
