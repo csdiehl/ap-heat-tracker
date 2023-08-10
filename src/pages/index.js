@@ -1,18 +1,14 @@
-import React from "react"
 import { toSentence } from "ap-react-utils"
-import {
-  Nav,
-  Article,
-  SeoHeadline,
-  HeroTitle,
-  Metadata,
-  BodyText,
-  Graphic,
-  EndNotes,
-  Footer,
-} from "tailor"
-import apLogo from "ap-interactive-assets/images/AP_LOGO_86x100.png"
 import HeatTracker from "js/visuals/heat_tracker"
+import React from "react"
+import {
+  Article,
+  BodyText,
+  EndNotes,
+  Graphic,
+  Metadata,
+  SeoHeadline,
+} from "tailor"
 
 const metadata = {
   title: "Heat Tracker",
