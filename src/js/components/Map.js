@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react"
-import Map, { Source, Layer, Popup } from "react-map-gl"
+import Map, { Source, Layer, Popup, NavigationControl } from "react-map-gl"
 import maplibre from "maplibre-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import { cities } from "./MapStyles"
@@ -82,6 +82,7 @@ function BaseMap({ setDate }) {
             than the normal for <strong>{thisMonth}</strong>
           </Popup>
         )}
+        <NavigationControl position="bottom-right" />
       </Map>
     </>
   )

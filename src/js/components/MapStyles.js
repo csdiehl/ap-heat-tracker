@@ -1,4 +1,4 @@
-import { colors } from "./settings"
+import { colors, citySizes } from "./settings"
 
 const colorScale = [
   "step",
@@ -28,13 +28,13 @@ export const cities = {
     "circle-radius": [
       "step",
       ["get", "pop"],
-      2,
+      citySizes[0],
       10_000,
-      5,
+      citySizes[1],
       100_000,
-      7,
+      citySizes[2],
       1_000_000,
-      10,
+      citySizes[3],
     ],
   },
 }

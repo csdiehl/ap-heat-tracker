@@ -1,9 +1,9 @@
 import styled from "styled-components"
 
 export const initialViewState = {
-  latitude: 37.7751,
-  longitude: -60.4193,
-  zoom: 3,
+  latitude: 30.7751,
+  longitude: 0,
+  zoom: 1.5,
   bearing: 0,
   pitch: 0,
 }
@@ -16,6 +16,8 @@ export const colors = [
   "#EF3340",
   "#992129",
 ]
+
+export const citySizes = [2, 5, 10, 15]
 
 export const styleEnum = "ef0fe5a4221944c090fb642fa80c83e7"
 
