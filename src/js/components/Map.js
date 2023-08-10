@@ -53,8 +53,6 @@ function BaseMap({ setDate }) {
     setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
   }
 
-  console.log(popupInfo)
-
   return (
     <>
       <Map
