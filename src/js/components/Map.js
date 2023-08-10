@@ -1,50 +1,14 @@
-import React, { useRef, useState, useEffect } from "react"
-import Map, { Source, Layer, Popup, NavigationControl } from "react-map-gl"
 import maplibre from "maplibre-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
+import React, { useRef, useState } from "react"
+import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
 import { cities } from "./MapStyles"
-import {
-  citiesLink,
-  tempsLink,
-  initialViewState,
-  styleEnum,
-  thisMonth,
-} from "./settings"
+import { initialViewState, styleEnum, thisMonth } from "./settings"
 
-function BaseMap({ setDate }) {
+function BaseMap({ data }) {
   const mapRef = useRef()
-  const [data, setData] = useState(null)
   const [popupInfo, setPopupInfo] = useState(null)
   // const latestTemp = stations && stations[stations.length - 1]
-
-  useEffect(() => {
-    async function joinTempsToCities() {
-      const res1 = await fetch(citiesLink)
-      const cities = await res1.json()
-      const res2 = await fetch(tempsLink)
-      const temps = await res2.json()
-
-      cities.features.forEach((city) => {
-        const temp = temps.find(
-          (x) =>
-            x.city + x.code === city?.properties?.city + city?.properties?.code
-        )
-
-        city.properties.diff = temp.diff
-      })
-
-      const sorted = temps
-        .filter((d) => d?.date)
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-      const firstDate = sorted[0]?.date,
-        lastDate = sorted.at(-1)?.date
-
-      setData(cities)
-      setDate([lastDate, firstDate])
-    }
-
-    joinTempsToCities()
-  }, [setDate])
 
   function handleMapClick(event) {
     if (!event?.features || event.features.length === 0) return

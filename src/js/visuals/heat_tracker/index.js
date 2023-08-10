@@ -1,9 +1,11 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import BaseMap from "../../components/Map"
 import Legend from "../../components/Legend"
 import styled from "styled-components"
-import { Title, Text } from "../../components/settings"
+import { Title, Text, citiesLink, tempsLink } from "../../components/settings"
 import Tooltip from "../../components/Tooltip"
+import Table from "../../components/Table"
+import { CardBackground, AbsolutePos } from "../../components/mixins"
 
 const Container = styled.div`
   height: 700px;
@@ -12,14 +14,10 @@ const Container = styled.div`
 `
 
 const InfoBox = styled.div`
-  position: absolute;
-  z-index: 1;
+  ${AbsolutePos}
   top: 16px;
   left: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 16px;
-  border-radius: 5px;
-  box-sizing: border-box;
+  ${CardBackground}
 `
 const formatDate = (dateString) =>
   new Date(dateString).toLocaleDateString("en-US", {
@@ -29,11 +27,52 @@ const formatDate = (dateString) =>
     day: "numeric",
   })
 
+const dataForTable = (data) =>
+  data?.features &&
+  data.features
+    .sort((a, b) => b.properties.diff - a.properties.diff)
+    .slice(0, 10)
+    .map((d) => d.properties)
+
 function HeatTracker() {
   const [date, setDate] = useState([0, 0])
   const containerRef = useRef()
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    async function joinTempsToCities() {
+      const res1 = await fetch(citiesLink)
+      const cities = await res1.json()
+      const res2 = await fetch(tempsLink)
+      const temps = await res2.json()
+
+      cities.features.forEach((city) => {
+        const temp = temps.find(
+          (x) =>
+            x.city + x.code === city?.properties?.city + city?.properties?.code
+        )
+
+        city.properties.diff = temp.diff
+      })
+
+      const sorted = temps
+        .filter((d) => d?.date)
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+      const firstDate = sorted[0]?.date,
+        lastDate = sorted.at(-1)?.date
+
+      setData(cities)
+      setDate([lastDate, firstDate])
+    }
+
+    joinTempsToCities()
+  }, [setDate])
+
+  console.log(dataForTable(data))
+
   return (
     <Container ref={containerRef}>
+      {data && <Table data={dataForTable(data)} />}
       <InfoBox>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Title>Extreme Heat Tracker</Title>
@@ -45,7 +84,7 @@ function HeatTracker() {
         </Text>
       </InfoBox>
       <Legend />
-      <BaseMap setDate={setDate} />
+      <BaseMap data={data} />
     </Container>
   )
 }

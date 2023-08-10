@@ -3,16 +3,13 @@ import { colors } from "./settings"
 import styled from "styled-components"
 import { SubHeading, Text } from "./settings"
 import SizeLegend from "./SizeLegend"
+import { CardBackground, AbsolutePos } from "./mixins"
 
 const Container = styled.div`
-  position: absolute;
   bottom: 16px;
   left: 16px;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 16px;
-  border-radius: 5px;
-  box-sizing: border-box;
+  ${AbsolutePos}
+  ${CardBackground}
   display: flex;
   gap: 16px;
 `
