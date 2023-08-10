@@ -59,6 +59,7 @@
     "yargs": "^17.2.1"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.0.6",
     "ap-embed": "^1.1.0",
     "ap-interactive-assets": "^1.2.1",
     "ap-interactives-plumbing": "^1.0.10",

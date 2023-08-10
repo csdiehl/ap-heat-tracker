@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import BaseMap from "../../components/Map"
 import Legend from "../../components/Legend"
 import styled from "styled-components"
 import { Title, Text } from "../../components/settings"
+import Tooltip from "../../components/Tooltip"
 
 const Container = styled.div`
   height: 700px;
@@ -30,10 +31,15 @@ const formatDate = (dateString) =>
 
 function HeatTracker() {
   const [date, setDate] = useState([0, 0])
+  const containerRef = useRef()
   return (
-    <Container>
+    <Container ref={containerRef}>
       <InfoBox>
-        <Title>Extreme Heat Tracker</Title>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Title>Extreme Heat Tracker</Title>
+          <Tooltip boundary={containerRef.current} />
+        </div>
+
         <Text>
           Updated with data from {formatDate(date[0])} to {formatDate(date[1])}{" "}
         </Text>
