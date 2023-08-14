@@ -68,8 +68,8 @@ const Tooltip = ({ boundary, openSide = "top" }) => (
     <Popover.Trigger asChild>
       <Button aria-label="Information">
         <svg
-          width="20"
-          height="20"
+          width="28"
+          height="28"
           viewBox="0 0 16 16"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

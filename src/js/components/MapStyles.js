@@ -38,3 +38,43 @@ export const cities = {
     ],
   },
 }
+
+export const clusteredCities = {
+  id: "clusters",
+  type: "circle",
+  source: "cities",
+  filter: ["has", "point_count"],
+  paint: {
+    "circle-color": [
+      "step",
+      ["/", ["get", "avg_diff"], ["get", "point_count"]],
+      colors[0],
+      -10,
+      colors[1],
+      -5,
+      colors[2],
+      0,
+      colors[3],
+      5,
+      colors[4],
+      10,
+      colors[5],
+    ],
+    "circle-radius": ["step", ["get", "point_count"], 10, 100, 15, 750, 20],
+  },
+}
+
+export const clusterCounts = {
+  id: "cluster-count",
+  type: "symbol",
+  source: "cities",
+  filter: ["has", "point_count"],
+  layout: {
+    "text-field": "{point_count_abbreviated}",
+    "text-font": ["Arial Regular"],
+    "text-size": 12,
+  },
+  paint: {
+    "text-color": "#000",
+  },
+}

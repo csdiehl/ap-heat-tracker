@@ -62,3 +62,9 @@ export const Text = styled.h4`
 `
 
 export const thisMonth = new Date().toLocaleString("default", { month: "long" })
+
+export const breakpoints = {
+  mobile: "max-width: 425px",
+  tablet: "max-width: 768px",
+  desktop: "max-width: 1024px",
+}

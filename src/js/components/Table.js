@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { Text } from "./settings"
+import { Text, breakpoints } from "./settings"
 import { CardBackground, AbsolutePos } from "./mixins"
 
 const Container = styled.div`
@@ -9,6 +9,10 @@ const Container = styled.div`
   color: #fff;
   ${AbsolutePos}
   ${CardBackground}
+
+  @media(${breakpoints.mobile}) {
+    left: 0;
+  }
 `
 
 const Card = styled.div`
@@ -20,8 +24,8 @@ const Table = ({ data }) => {
   return (
     <Container>
       {data.map((d) => (
-        <Card key={d.code}>
-          <Text>+{d.diff.toFixed(1)}℉</Text>
+        <Card key={d.code + d.city}>
+          <Text>+{d.diff.toFixed(1)} F</Text>
           <Text>
             <strong>{d.city}</strong>, {d.country}
           </Text>

@@ -1,7 +1,7 @@
 import React from "react"
 import { colors } from "./settings"
 import styled from "styled-components"
-import { SubHeading, Text } from "./settings"
+import { SubHeading, Text, breakpoints } from "./settings"
 import SizeLegend from "./SizeLegend"
 import { CardBackground, AbsolutePos } from "./mixins"
 
@@ -12,6 +12,12 @@ const Container = styled.div`
   ${CardBackground}
   display: flex;
   gap: 16px;
+
+  @media (${breakpoints.mobile}) {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
 `
 
 const Colors = styled.div`
@@ -31,7 +37,7 @@ const Legend = () => {
   return (
     <Container>
       <div style={{ maxWidth: "200px" }}>
-        <SubHeading>Difference from Normal Temperature</SubHeading>
+        <SubHeading>Difference from 1991-2020 Temperature Normal</SubHeading>
         <Colors>
           {colors.map((c) => (
             <Patch key={c} color={c}></Patch>
@@ -44,10 +50,7 @@ const Legend = () => {
             alignItems: "flex-end",
             gap: "8px",
           }}
-        >
-          <Patch style={{ width: "16px", height: "16px" }} color="#000" />
-          <Text>No Data</Text>
-        </div>
+        ></div>
       </div>
       <SizeLegend />
     </Container>

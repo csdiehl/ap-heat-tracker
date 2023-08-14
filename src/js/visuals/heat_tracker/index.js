@@ -2,7 +2,13 @@ import React, { useState, useRef, useEffect } from "react"
 import BaseMap from "../../components/Map"
 import Legend from "../../components/Legend"
 import styled from "styled-components"
-import { Title, Text, citiesLink, tempsLink } from "../../components/settings"
+import {
+  Title,
+  Text,
+  citiesLink,
+  tempsLink,
+  breakpoints,
+} from "../../components/settings"
 import Tooltip from "../../components/Tooltip"
 import Table from "../../components/Table"
 import { CardBackground, AbsolutePos } from "../../components/mixins"
@@ -18,6 +24,12 @@ const InfoBox = styled.div`
   top: 16px;
   left: 16px;
   ${CardBackground}
+
+  @media(${breakpoints.mobile}) {
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
 `
 const formatDate = (dateString) =>
   new Date(dateString).toLocaleDateString("en-US", {
@@ -38,6 +50,12 @@ function HeatTracker() {
   const [date, setDate] = useState([0, 0])
   const containerRef = useRef()
   const [data, setData] = useState(null)
+
+  // remove cities with no data
+  const filteredData = data && {
+    ...data,
+    features: data.features.filter((d) => d?.properties?.diff),
+  }
 
   useEffect(() => {
     async function joinTempsToCities() {
@@ -68,8 +86,6 @@ function HeatTracker() {
     joinTempsToCities()
   }, [setDate])
 
-  console.log(dataForTable(data))
-
   return (
     <Container ref={containerRef}>
       {data && <Table data={dataForTable(data)} />}
@@ -84,7 +100,7 @@ function HeatTracker() {
         </Text>
       </InfoBox>
       <Legend />
-      <BaseMap data={data} />
+      <BaseMap data={filteredData} />
     </Container>
   )
 }

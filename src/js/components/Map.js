@@ -2,7 +2,7 @@ import maplibre from "maplibre-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import React, { useRef, useState } from "react"
 import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
-import { cities } from "./MapStyles"
+import { cities, clusterCounts, clusteredCities } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth } from "./settings"
 
 function BaseMap({ data }) {
@@ -28,8 +28,19 @@ function BaseMap({ data }) {
         interactiveLayerIds={["cities"]}
         mapStyle={`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${styleEnum}?type=style&token=AAPK607d6ebb8ce04a1a9fc5e06c1b80cf4aoVSN2GntWaa8EnGF8MNnFz_3vax7S1HODpwDAlFvelNGDk8JIFYk_Db6OH9ccx-T`}
       >
-        <Source id="city-data" type="geojson" data={data}>
+        <Source
+          id="city-data"
+          type="geojson"
+          data={data}
+          cluster={true}
+          clusterMaxZoom={14}
+          clusterRadius={20}
+          clusterMinPoints={5}
+          clusterProperties={{ "avg_diff": ["+", ["get", "diff"]] }}
+        >
           <Layer {...cities}></Layer>
+          <Layer {...clusteredCities}></Layer>
+          <Layer {...clusterCounts}></Layer>
         </Source>
         {popupInfo && (
           <Popup
@@ -38,9 +49,9 @@ function BaseMap({ data }) {
             anchor="bottom"
             onClose={() => setPopupInfo(false)}
           >
-            It is roughly <strong>{Math.abs(popupInfo.diff)} ℉</strong>{" "}
+            It is roughly <strong>{Math.abs(popupInfo.diff)} F</strong>{" "}
             {popupInfo.diff < 0 ? "colder" : "warmer"} in{" "}
-            <strong>
+            <strong style={{ textTransform: "capitalize" }}>
               {popupInfo.city}, {popupInfo.country}
             </strong>{" "}
             than the normal for <strong>{thisMonth}</strong>
