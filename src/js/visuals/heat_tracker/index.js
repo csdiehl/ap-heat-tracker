@@ -70,7 +70,7 @@ function HeatTracker() {
             x.city + x.code === city?.properties?.city + city?.properties?.code
         )
 
-        city.properties.diff = temp.diff
+        city.properties.diff = temp?.diff ?? 0
       })
 
       const sorted = temps
