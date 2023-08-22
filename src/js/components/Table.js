@@ -20,6 +20,9 @@ const Card = styled.div`
   align-items: top;
   justify-content: space-between;
   margin: 8px 0px;
+  cursor: pointer;
+  background: ${(props) =>
+    props.clicked ? "rgba(255, 255, 255, .05)" : "none"};
 `
 
 const Number = styled.p`
@@ -34,11 +37,15 @@ const Plus = styled.span`
   font-weight: 400;
 `
 
-const Table = ({ data }) => {
+const Table = ({ data, setSelectedCity, selectedCity }) => {
   return (
     <Container>
       {data.map((d) => (
-        <Card key={d.code + d.city}>
+        <Card
+          clicked={d.city === selectedCity}
+          onClick={() => setSelectedCity(d.city)}
+          key={d.code + d.city}
+        >
           <Number color={colorScale(d.diff)}>
             <Plus>+</Plus>
             {d.diff.toFixed(1)}

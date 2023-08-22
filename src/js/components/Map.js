@@ -2,10 +2,15 @@ import maplibre from "maplibre-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import React, { useRef, useState } from "react"
 import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
-import { cities, clusterCounts, clusteredCities } from "./MapStyles"
-import { initialViewState, neutralGrey, styleEnum, thisMonth } from "./settings"
+import {
+  cities,
+  clusterCounts,
+  clusteredCities,
+  selectedCityLayer,
+} from "./MapStyles"
+import { initialViewState, styleEnum, thisMonth } from "./settings"
 
-function BaseMap({ data }) {
+function BaseMap({ data, selectedCity }) {
   const mapRef = useRef()
   const [popupInfo, setPopupInfo] = useState(null)
   // const latestTemp = stations && stations[stations.length - 1]
@@ -58,6 +63,12 @@ function BaseMap({ data }) {
             than the normal for <strong>{thisMonth}</strong>
           </Popup>
         )}
+        <Layer
+          source="city-data"
+          {...selectedCityLayer}
+          filter={["==", ["get", "city"], selectedCity]}
+          layout={{ visibility: selectedCity ? "visible" : "none" }}
+        ></Layer>
         <NavigationControl
           style={{ backgroundColor: "lightgrey" }}
           position="top-right"

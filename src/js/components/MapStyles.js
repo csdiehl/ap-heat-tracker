@@ -78,3 +78,16 @@ export const clusterCounts = {
     "text-color": "#000",
   },
 }
+
+export const selectedCityLayer = {
+  id: "cities-highlight",
+  source: "city-data",
+  type: "circle",
+  paint: {
+    "circle-color": "black",
+    "circle-opacity": 0.3,
+    "circle-stroke-width": 3,
+    "circle-stroke-color": colors[5],
+    "circle-radius": 20,
+  },
+}

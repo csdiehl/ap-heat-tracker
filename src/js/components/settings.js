@@ -18,7 +18,6 @@ export const colors = [
 ]
 
 export function colorScale(temp) {
-  console.log(temp, temp > 10)
   switch (true) {
     case temp <= -10:
       return colors[0]

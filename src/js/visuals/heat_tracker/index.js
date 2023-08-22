@@ -50,6 +50,7 @@ function HeatTracker() {
   const [date, setDate] = useState([0, 0])
   const containerRef = useRef()
   const [data, setData] = useState(null)
+  const [selectedCity, setSelectedCity] = useState(null)
 
   // remove cities with no data
   const filteredData = data && {
@@ -88,7 +89,13 @@ function HeatTracker() {
 
   return (
     <Container ref={containerRef}>
-      {data && <Table data={dataForTable(data)} />}
+      {data && (
+        <Table
+          data={dataForTable(data)}
+          selectedCity={selectedCity}
+          setSelectedCity={setSelectedCity}
+        />
+      )}
       <InfoBox>
         <div
           style={{
@@ -106,7 +113,11 @@ function HeatTracker() {
         </Text>
       </InfoBox>
       <Legend />
-      <BaseMap style={{ gridArea: "map" }} data={filteredData} />
+      <BaseMap
+        selectedCity={selectedCity}
+        style={{ gridArea: "map" }}
+        data={filteredData}
+      />
     </Container>
   )
 }
