@@ -7,29 +7,27 @@ import {
   Text,
   citiesLink,
   tempsLink,
-  breakpoints,
+  neutralGrey,
 } from "../../components/settings"
 import Tooltip from "../../components/Tooltip"
 import Table from "../../components/Table"
-import { CardBackground, AbsolutePos } from "../../components/mixins"
 
 const Container = styled.div`
   height: 700px;
   width: 100%;
   position: relative;
+  background: ${neutralGrey};
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "title map"
+    "list map";
 `
 
 const InfoBox = styled.div`
-  ${AbsolutePos}
-  top: 16px;
-  left: 16px;
-  ${CardBackground}
-
-  @media(${breakpoints.mobile}) {
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
+  grid-area: title;
+  padding: 8px;
 `
 const formatDate = (dateString) =>
   new Date(dateString).toLocaleDateString("en-US", {
@@ -90,7 +88,13 @@ function HeatTracker() {
     <Container ref={containerRef}>
       {data && <Table data={dataForTable(data)} />}
       <InfoBox>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gridArea: "title",
+          }}
+        >
           <Title>Extreme Heat Tracker</Title>
           <Tooltip boundary={containerRef.current} />
         </div>
@@ -100,7 +104,7 @@ function HeatTracker() {
         </Text>
       </InfoBox>
       <Legend />
-      <BaseMap data={filteredData} />
+      <BaseMap style={{ gridArea: "map" }} data={filteredData} />
     </Container>
   )
 }

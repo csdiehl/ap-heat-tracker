@@ -6,8 +6,8 @@ import SizeLegend from "./SizeLegend"
 import { CardBackground, AbsolutePos } from "./mixins"
 
 const Container = styled.div`
-  bottom: 16px;
-  left: 16px;
+  bottom: 8px;
+  right: 8px;
   ${AbsolutePos}
   ${CardBackground}
   display: flex;

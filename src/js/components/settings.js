@@ -9,17 +9,39 @@ export const initialViewState = {
 }
 
 export const colors = [
-  "#006788",
-  "#00ABE2",
   "#CCEEF9",
-  "#FCD6D9",
-  "#EF3340",
-  "#992129",
+  "#00ABE2",
+  "#006788",
+  "#C47A0A",
+  "#F9C16D",
+  "#FBD69E",
 ]
+
+export function colorScale(temp) {
+  console.log(temp, temp > 10)
+  switch (true) {
+    case temp <= -10:
+      return colors[0]
+    case temp <= -5:
+      return colors[1]
+    case temp <= 0:
+      return colors[2]
+    case temp <= 5:
+      return colors[3]
+    case temp <= 10:
+      return colors[4]
+    case temp > 10:
+      return colors[5]
+    default:
+      return "#FFF"
+  }
+}
+
+export const neutralGrey = "rgb(29, 34, 36)"
 
 export const citySizes = [2, 5, 10, 15]
 
-export const styleEnum = "ef0fe5a4221944c090fb642fa80c83e7"
+export const styleEnum = "c11ce4f7801740b2905eb03ddc963ac8"
 
 //  "42410a35dc9445eeb65d10da1a5f62f0"
 

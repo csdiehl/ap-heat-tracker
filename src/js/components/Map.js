@@ -3,7 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css"
 import React, { useRef, useState } from "react"
 import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
 import { cities, clusterCounts, clusteredCities } from "./MapStyles"
-import { initialViewState, styleEnum, thisMonth } from "./settings"
+import { initialViewState, neutralGrey, styleEnum, thisMonth } from "./settings"
 
 function BaseMap({ data }) {
   const mapRef = useRef()
@@ -20,6 +20,7 @@ function BaseMap({ data }) {
   return (
     <>
       <Map
+        style={{ gridArea: "map" }}
         mapLib={maplibre}
         attributionControl={false}
         ref={mapRef}
@@ -57,7 +58,10 @@ function BaseMap({ data }) {
             than the normal for <strong>{thisMonth}</strong>
           </Popup>
         )}
-        <NavigationControl position="bottom-right" />
+        <NavigationControl
+          style={{ backgroundColor: "lightgrey" }}
+          position="top-right"
+        />
       </Map>
     </>
   )
