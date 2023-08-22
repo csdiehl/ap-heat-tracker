@@ -74,7 +74,7 @@ export const SubHeading = styled.h3`
 `
 
 export const Text = styled.h4`
-  color: #fff;
+  color: lightgrey;
   font-family: AP Var;
   font-size: 0.875rem;
   font-style: normal;

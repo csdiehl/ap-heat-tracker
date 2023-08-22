@@ -34,10 +34,6 @@ const Plus = styled.span`
   font-weight: 400;
 `
 
-const Country = styled.span`
-  color: lightgrey;
-`
-
 const Table = ({ data }) => {
   return (
     <Container>
@@ -49,8 +45,8 @@ const Table = ({ data }) => {
             <Plus>F</Plus>
           </Number>
           <Text style={{ textAlign: "right" }}>
-            <strong>{d.city}</strong>
-            <br /> <Country>{d.country}</Country>
+            <strong style={{ color: "#FFF" }}>{d.city}</strong>
+            <br /> {d.country}
           </Text>
         </Card>
       ))}

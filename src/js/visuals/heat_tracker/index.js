@@ -13,6 +13,8 @@ import Tooltip from "../../components/Tooltip"
 import Table from "../../components/Table"
 
 const Container = styled.div`
+  padding: 8px;
+  border-radius: 5px;
   height: 700px;
   width: 100%;
   position: relative;
