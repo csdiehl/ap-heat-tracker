@@ -15,6 +15,8 @@ export const colors = [
   "#C47A0A",
   "#F9C16D",
   "#FBD69E",
+  "#FDEACE",
+  "#F9ADB3",
 ]
 
 export function colorScale(temp) {
@@ -25,12 +27,16 @@ export function colorScale(temp) {
       return colors[1]
     case temp <= 0:
       return colors[2]
-    case temp <= 5:
+    case temp <= 2:
       return colors[3]
-    case temp <= 10:
+    case temp <= 4:
       return colors[4]
-    case temp > 10:
+    case temp <= 6:
       return colors[5]
+    case temp <= 8:
+      return colors[6]
+    case temp > 8:
+      return colors[7]
     default:
       return "#FFF"
   }

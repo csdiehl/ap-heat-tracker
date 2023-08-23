@@ -10,10 +10,14 @@ const colorScale = [
   colors[2],
   0,
   colors[3],
-  5,
+  2,
   colors[4],
-  10,
+  4,
   colors[5],
+  6,
+  colors[6],
+  8,
+  colors[7],
 ]
 
 export const cities = {

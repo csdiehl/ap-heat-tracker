@@ -27,7 +27,7 @@ const Colors = styled.div`
 `
 
 const Patch = styled.div`
-  width: 100%;
+  width: 16px;
   height: 100%;
   background-color: ${(props) => props.color};
   border-radius: 2px;
@@ -39,7 +39,7 @@ const Legend = () => {
       <div style={{ maxWidth: "200px" }}>
         <SubHeading>Difference from 1991-2020 Temperature Normal</SubHeading>
         <Colors>
-          {colors.map((c) => (
+          {colors.slice(3, colors.length).map((c) => (
             <Patch key={c} color={c}></Patch>
           ))}
         </Colors>

@@ -39,6 +39,26 @@ const formatDate = (dateString) =>
     day: "numeric",
   })
 
+const findDateExtent = (data) => {
+  const sorted = data
+    .filter((d) => d?.date)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+  const firstDate = sorted[0]?.date,
+    lastDate = sorted.at(-1)?.date
+
+  return [firstDate, lastDate]
+}
+
+const joinTemperatures = (cities, temps) => {
+  cities.features.forEach((city) => {
+    const temp = temps.find(
+      (x) => x.city + x.code === city?.properties?.city + city?.properties?.code
+    )
+
+    city.properties.diff = temp?.diff ?? 0
+  })
+}
+
 const dataForTable = (data) =>
   data?.features &&
   data.features
@@ -65,22 +85,17 @@ function HeatTracker() {
       const res2 = await fetch(tempsLink)
       const temps = await res2.json()
 
-      cities.features.forEach((city) => {
-        const temp = temps.find(
-          (x) =>
-            x.city + x.code === city?.properties?.city + city?.properties?.code
-        )
+      joinTemperatures(cities, temps)
+      const [firstDate, lastDate] = findDateExtent(temps)
 
-        city.properties.diff = temp?.diff ?? 0
-      })
+      const filteredCities = {
+        ...cities,
+        features: cities.features.filter((d) => d?.properties?.diff >= 0),
+      }
 
-      const sorted = temps
-        .filter((d) => d?.date)
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-      const firstDate = sorted[0]?.date,
-        lastDate = sorted.at(-1)?.date
+      console.log(filteredCities)
 
-      setData(cities)
+      setData(filteredCities)
       setDate([lastDate, firstDate])
     }
 
