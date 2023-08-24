@@ -1,16 +1,16 @@
-const webpack = require('webpack')
-const path = require('path')
-const del = require('del')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlWebpackJsdomPrerenderPlugin = require('html-webpack-jsdom-prerender-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
-const MetataggerPlugin = require('metatagger-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const seo = require('ap-interactives-plumbing/seo')
-const utils = require('./webpack-utils')
+const webpack = require("webpack")
+const path = require("path")
+const del = require("del")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const HtmlWebpackJsdomPrerenderPlugin = require("html-webpack-jsdom-prerender-plugin")
+const CopyPlugin = require("copy-webpack-plugin")
+const MetataggerPlugin = require("metatagger-webpack-plugin")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const seo = require("ap-interactives-plumbing/seo")
+const utils = require("./webpack-utils")
 
 const pages = utils.getPageEntrypoints()
 const visuals = utils.getVisualEntrypoints()
@@ -27,17 +27,14 @@ const preview = !!process.env.PREVIEW
 
 const baseUrl = seo.canonical(utils.project, { local, port, preview })
 
-const outputFolder = 'public'
+const outputFolder = "public"
 
-const getConfig  = (entrypoints, assetPublicPath) => ({
-  mode: 'production',
-  devtool: 'source-map',
+const getConfig = (entrypoints, assetPublicPath) => ({
+  mode: "production",
+  devtool: "source-map",
   resolve: {
-    modules: [
-      'node_modules',
-      'src',
-    ],
-    extensions: ['.js', '.jsx'],
+    modules: ["node_modules", "src"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
   entry: {
     ...entrypoints,
@@ -45,10 +42,10 @@ const getConfig  = (entrypoints, assetPublicPath) => ({
   },
   output: {
     path: path.resolve(utils.repoRoot, outputFolder),
-    chunkFilename: '__cdn__/js/[id].[contenthash].js',
+    chunkFilename: "__cdn__/js/[id].[contenthash].js",
     filename: (pathData) => {
-      if (clients[pathData.chunk.name]) return '[name].js'
-      const name = pathData.chunk.name.replace(/\//g, '--')
+      if (clients[pathData.chunk.name]) return "[name].js"
+      const name = pathData.chunk.name.replace(/\//g, "--")
       return `__cdn__/js/${name}.[contenthash].js`
     },
   },
@@ -56,83 +53,96 @@ const getConfig  = (entrypoints, assetPublicPath) => ({
     rules: [
       {
         test: /\.jsx?$/,
-        enforce: 'pre',
-        loader: 'eslint-loader',
+        enforce: "pre",
+        loader: "eslint-loader",
         exclude: /node_modules/,
         options: {
           emitWarning: true,
-        }
+        },
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             presets: [
-              ['@babel/preset-env', {
-                useBuiltIns: 'usage',
-                corejs: 3,
-                targets: {
-                  browsers: 'defaults',
+              [
+                "@babel/preset-env",
+                {
+                  useBuiltIns: "usage",
+                  corejs: 3,
+                  targets: {
+                    browsers: "defaults",
+                  },
                 },
-              }],
-              '@babel/preset-react',
+              ],
+              "@babel/preset-react",
             ],
             plugins: [
-              '@babel/proposal-class-properties',
-              '@babel/plugin-proposal-object-rest-spread',
-              'transform-react-remove-prop-types',
+              "@babel/proposal-class-properties",
+              "@babel/plugin-proposal-object-rest-spread",
+              "transform-react-remove-prop-types",
             ],
           },
         },
       },
       {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
         test: /.*\.s?css$/,
         sideEffects: true,
-        use: [{
-          loader: MiniCssExtractPlugin.loader,
-        }, {
-          loader: 'css-loader',
-          options: {
-            sourceMap: true,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
           },
-        }, {
-          loader: 'resolve-url-loader',
-        }, {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+            },
           },
-        }],
+          {
+            loader: "resolve-url-loader",
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|font\.svg)$/,
-        type: 'asset/resource',
+        type: "asset/resource",
         generator: {
-          filename: '__cdn__/fonts/[name].[contenthash][ext]',
+          filename: "__cdn__/fonts/[name].[contenthash][ext]",
         },
       },
       {
         test: /\.(png|svg|jpg|gif|webp|avif)$/,
         exclude: /\.(font\.svg)$/,
-        type: 'asset',
+        type: "asset",
         generator: {
-          filename: '__cdn__/images/[name].[contenthash][ext]',
-          publicPath: assetPublicPath
+          filename: "__cdn__/images/[name].[contenthash][ext]",
+          publicPath: assetPublicPath,
         },
       },
       {
         test: /\.(mp4|mov|webm)$/,
-        type: 'asset',
+        type: "asset",
         generator: {
-          filename: '__cdn__/videos/[name].[contenthash][ext]',
+          filename: "__cdn__/videos/[name].[contenthash][ext]",
         },
       },
       {
         test: /\.ai$/,
         use: {
-          loader: 'ai2react-loader',
+          loader: "ai2react-loader",
           options: {
             skipBuild: true,
           },
@@ -141,29 +151,27 @@ const getConfig  = (entrypoints, assetPublicPath) => ({
     ],
   },
   optimization: {
-    minimizer: [
-      new TerserPlugin(),
-      new OptimizeCSSAssetsPlugin(),
-    ],
+    minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin()],
   },
   plugins: [
     new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify('production'),
+      NODE_ENV: JSON.stringify("production"),
       PROJECT_BASE_URL: JSON.stringify(baseUrl),
       PROJECT_DATA_URL: JSON.stringify(`${baseUrl}live-data`),
-      GOOGLE_ANALYTICS_ID: JSON.stringify('UA-19104461-33'),
+      GOOGLE_ANALYTICS_ID: JSON.stringify("UA-19104461-33"),
     }),
-    ...Object.keys(entrypoints).map(name => (
-      new HtmlWebpackPlugin({
-        filename: `${name}.html`,
-        template: 'src/index.html',
-        templateParameters: {
-          content: `<div class="ap-interactive" data-interactive="${utils.project.metadata.slug}" data-entrypoint="${name}"></div>`,
-        },
-        chunks: [name],
-      })
-    )),
-    ...Object.keys(entrypoints).map(name => {
+    ...Object.keys(entrypoints).map(
+      (name) =>
+        new HtmlWebpackPlugin({
+          filename: `${name}.html`,
+          template: "src/index.html",
+          templateParameters: {
+            content: `<div class="ap-interactive" data-interactive="${utils.project.metadata.slug}" data-entrypoint="${name}"></div>`,
+          },
+          chunks: [name],
+        })
+    ),
+    ...Object.keys(entrypoints).map((name) => {
       const page = `${name}.html`
       return new MetataggerPlugin({
         pages: [page],
@@ -176,33 +184,46 @@ const getConfig  = (entrypoints, assetPublicPath) => ({
         }),
       })
     }),
-    new HtmlWebpackJsdomPrerenderPlugin(Object.keys(entrypoints).reduce((es, name) => ({
-      ...es,
-      [`${name}.html`]: {
-        chunks: [name],
-      },
-    }), {})),
+    new HtmlWebpackJsdomPrerenderPlugin(
+      Object.keys(entrypoints).reduce(
+        (es, name) => ({
+          ...es,
+          [`${name}.html`]: {
+            chunks: [name],
+          },
+        }),
+        {}
+      )
+    ),
     new MiniCssExtractPlugin({
-      filename: '__cdn__/css/[name].[contenthash].css',
+      filename: "__cdn__/css/[name].[contenthash].css",
     }),
     new CopyPlugin({
       patterns: [
         {
-          from: 'static/**',
+          from: "static/**",
           to: ({ absoluteFilename }) => {
-            return path.relative('./static', absoluteFilename)
+            return path.relative("./static", absoluteFilename)
           },
         },
-        ...Object.keys(pages).map(name => ({
-          from: 'package.json',
+        ...Object.keys(pages).map((name) => ({
+          from: "package.json",
           to: `${name}-metadata.json`,
           transform: () => {
             const page = `${name}.html`
             return JSON.stringify({
-              image: seo.shareImage(utils.project, { page, preview, local, port }),
+              image: seo.shareImage(utils.project, {
+                page,
+                preview,
+                local,
+                port,
+              }),
               url: seo.canonical(utils.project, { page, preview, local, port }),
               updated: new Date(),
-              ...seo.pageMetadata(utils.project, { page, contentDir: utils.contentDir }),
+              ...seo.pageMetadata(utils.project, {
+                page,
+                contentDir: utils.contentDir,
+              }),
             })
           },
         })),
@@ -215,10 +236,10 @@ const getConfig  = (entrypoints, assetPublicPath) => ({
 // Clean out project files when webpack is loaded. This is required because of how CleanWepbackPlugin
 // is configured, in way that permits multiple configs. Discussion here:
 // https://github.com/johnagan/clean-webpack-plugin/issues/122
-del.sync([path.resolve(utils.repoRoot, outputFolder, '**/*')])
+del.sync([path.resolve(utils.repoRoot, outputFolder, "**/*")])
 
 module.exports = [
-  getConfig(pages, './'),
+  getConfig(pages, "./"),
   // Different relative public path for visuals since they are not served from the root
-  getConfig(visuals, '../'),
+  getConfig(visuals, "../"),
 ]

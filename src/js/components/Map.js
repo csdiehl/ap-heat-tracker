@@ -10,6 +10,7 @@ import {
 } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth } from "./settings"
 import { FtoC } from "./utils"
+import FormattedPopup from "./FormattedPopup"
 
 function BaseMap({ data, selectedCity, tempScale }) {
   const mapRef = useRef()
@@ -22,6 +23,8 @@ function BaseMap({ data, selectedCity, tempScale }) {
     const coords = event?.features[0]?.geometry?.coordinates ?? []
     setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
   }
+
+  console.log(popupInfo)
 
   return (
     <>
@@ -56,12 +59,11 @@ function BaseMap({ data, selectedCity, tempScale }) {
             anchor="bottom"
             onClose={() => setPopupInfo(false)}
           >
-            It is roughly <strong>{`${Math.abs(popupInfo.diff)} F`}</strong>{" "}
-            {popupInfo.diff < 0 ? "colder" : "warmer"} in{" "}
-            <strong style={{ textTransform: "capitalize" }}>
-              {popupInfo.city}, {popupInfo.country}
-            </strong>{" "}
-            than the normal for <strong>{thisMonth}</strong>
+            <FormattedPopup
+              info={popupInfo}
+              scale={tempScale}
+              month={thisMonth}
+            />
           </Popup>
         )}
         <Layer

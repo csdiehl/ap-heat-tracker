@@ -1,14 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import BaseMap from "../../components/Map"
 import Legend from "../../components/Legend"
-import styled from "styled-components"
-import {
-  Title,
-  Text,
-  citiesLink,
-  tempsLink,
-  neutralGrey,
-} from "../../components/settings"
+import { Title, Text, citiesLink, tempsLink } from "../../components/settings"
 import Tooltip from "../../components/Tooltip"
 import Table from "../../components/Table"
 import {
@@ -17,44 +10,7 @@ import {
   joinTemperatures,
   dataForTable,
 } from "../../components/utils"
-import { AbsolutePos } from "../../components/mixins"
-
-const Container = styled.div`
-  padding: 8px;
-  border-radius: 5px;
-  height: 700px;
-  width: 100%;
-  position: relative;
-  background: ${neutralGrey};
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "title map"
-    "list map";
-`
-
-const InfoBox = styled.div`
-  grid-area: title;
-  padding: 8px;
-`
-
-const TempToggle = styled.button`
-  all: unset;
-  ${AbsolutePos};
-  top: 16px;
-  right: 50px;
-  background: lightgrey;
-  border-radius: 50%;
-  z-index: 3;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  cursor: pointer;
-`
+import { Container, InfoBox, TempToggle } from "./styles"
 
 function HeatTracker() {
   const [date, setDate] = useState([0, 0])
@@ -91,19 +47,21 @@ function HeatTracker() {
   return (
     <Container ref={containerRef}>
       <TempToggle
+        key={tempScale}
         onClick={() =>
           setTempScale((prev) =>
             prev === "Farenheit" ? "Celcius" : "Farenheit"
           )
         }
       >
-        C
+        {tempScale === "Farenheit" ? "F" : "C"}
       </TempToggle>
       {data && (
         <Table
           data={dataForTable(data)}
           selectedCity={selectedCity}
           setSelectedCity={setSelectedCity}
+          tempScale={tempScale}
         />
       )}
       <InfoBox>

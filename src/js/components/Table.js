@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { Text, breakpoints, colorScale } from "./settings"
+import { FtoCdelta } from "./utils"
 
 const Container = styled.div`
   top: 108px;
@@ -37,7 +38,7 @@ const Plus = styled.span`
   font-weight: 400;
 `
 
-const Table = ({ data, setSelectedCity, selectedCity }) => {
+const Table = ({ data, setSelectedCity, selectedCity, tempScale }) => {
   return (
     <Container>
       {data.map((d) => (
@@ -48,8 +49,8 @@ const Table = ({ data, setSelectedCity, selectedCity }) => {
         >
           <Number color={colorScale(d.diff)}>
             <Plus>+</Plus>
-            {d.diff.toFixed(1)}
-            <Plus>F</Plus>
+            {tempScale === "Farenheit" ? d.diff.toFixed(1) : FtoCdelta(d.diff)}
+            <Plus>{tempScale === "Farenheit" ? "F" : "C"}</Plus>
           </Number>
           <Text style={{ textAlign: "right" }}>
             <strong style={{ color: "#FFF" }}>{d.city}</strong>
