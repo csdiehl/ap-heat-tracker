@@ -61,6 +61,8 @@
   "dependencies": {
     "@apdata/core": "^0.1.0",
     "@radix-ui/react-popover": "^1.0.6",
+    "@types/react": "^18.2.21",
+    "@types/styled-components": "^5.1.26",
     "ap-embed": "^1.1.0",
     "ap-interactive-assets": "^1.2.1",
     "ap-interactives-plumbing": "^1.0.10",
@@ -77,6 +79,7 @@
     "react-map-gl": "7.0.25",
     "styled-components": "^5.3.1",
     "tailor": "^2.1.1",
+    "ts-loader": "^9.4.4",
     "typescript": "^5.2.2"
   },
   "babel": {

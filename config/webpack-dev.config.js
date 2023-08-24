@@ -1,22 +1,23 @@
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MetataggerPlugin = require('metatagger-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
-const path = require('path')
-const portfinder = require('portfinder')
-const seo = require('ap-interactives-plumbing/seo')
-const utils = require('./webpack-utils')
+const webpack = require("webpack")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const MetataggerPlugin = require("metatagger-webpack-plugin")
+const CopyPlugin = require("copy-webpack-plugin")
+const path = require("path")
+const portfinder = require("portfinder")
+const seo = require("ap-interactives-plumbing/seo")
+const utils = require("./webpack-utils")
 
 portfinder.basePort = 8000
 
 const parseArgs = (env) => {
-  const defaultProxyPort = env.PROXY || '3000'
-  const args = require('yargs').default('proxy', defaultProxyPort).argv
+  const defaultProxyPort = env.PROXY || "3000"
+  const args = require("yargs").default("proxy", defaultProxyPort).argv
   return args
 }
 
 const config = (env, argv, port, args) => {
-  const canonical = (opts = {}) => utils.canonical({ local: true, port, ...opts })
+  const canonical = (opts = {}) =>
+    utils.canonical({ local: true, port, ...opts })
   const shareImg = (opts = {}) => utils.shareImg({ local: true, port, ...opts })
 
   const pages = utils.getPageEntrypoints()
@@ -29,32 +30,29 @@ const config = (env, argv, port, args) => {
   }
 
   return {
-    mode: 'development',
-    devtool: 'eval-source-map',
+    mode: "development",
+    devtool: "eval-source-map",
     resolve: {
-      modules: [
-        'node_modules',
-        'src',
-      ],
-      extensions: ['.js', '.jsx'],
+      modules: ["node_modules", "src"],
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
     },
-    target: 'web',
+    target: "web",
     entry: {
       ...entrypoints,
       ...clients,
     },
     output: {
-      path: path.resolve(utils.repoRoot, 'public'),
-      chunkFilename: '__cdn__/js/[id].[contenthash].js',
+      path: path.resolve(utils.repoRoot, "public"),
+      chunkFilename: "__cdn__/js/[id].[contenthash].js",
       filename: (pathData) => {
-        if (clients[pathData.chunk.name]) return '[name].js'
-        return '__cdn__/js/[name].[contenthash].js';
+        if (clients[pathData.chunk.name]) return "[name].js"
+        return "__cdn__/js/[name].[contenthash].js"
       },
     },
     devServer: {
       compress: true,
       port,
-      open: '/',
+      open: "/",
       hot: true,
       client: {
         overlay: {
@@ -63,7 +61,7 @@ const config = (env, argv, port, args) => {
         },
       },
       proxy: {
-        '/live-data/': {
+        "/live-data/": {
           /**
            * Uncomment these lines (and comment out the rest of this object) to
            * serve live-data locally
@@ -76,94 +74,103 @@ const config = (env, argv, port, args) => {
       rules: [
         {
           test: /\.jsx?$/,
-          enforce: 'pre',
-          loader: 'eslint-loader',
+          enforce: "pre",
+          loader: "eslint-loader",
           exclude: /node_modules/,
           options: {
             emitWarning: true,
-          }
+          },
         },
         {
           test: /\.jsx?$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
               presets: [
-                ['@babel/env', {
-                  useBuiltIns: 'usage',
-                  corejs: 3,
-                  targets: {
-                    browsers: 'defaults',
+                [
+                  "@babel/env",
+                  {
+                    useBuiltIns: "usage",
+                    corejs: 3,
+                    targets: {
+                      browsers: "defaults",
+                    },
                   },
-                }],
-                '@babel/preset-react',
+                ],
+                "@babel/preset-react",
               ],
               plugins: [
-                '@babel/proposal-class-properties',
-                '@babel/plugin-proposal-object-rest-spread',
+                "@babel/proposal-class-properties",
+                "@babel/plugin-proposal-object-rest-spread",
               ],
             },
           },
         },
         {
+          test: /\.tsx?$/,
+          use: "ts-loader",
+          exclude: /node_modules/,
+        },
+        {
           test: /.*\.s?css$/,
           sideEffects: true,
           use: [
-            'style-loader',
-            'css-loader',
-            'resolve-url-loader',
-            'sass-loader',
+            "style-loader",
+            "css-loader",
+            "resolve-url-loader",
+            "sass-loader",
           ],
         },
         {
           test: /\.(woff|woff2|eot|ttf|font\.svg)$/,
-          type: 'asset/resource',
+          type: "asset/resource",
           generator: {
-            filename: '__cdn__/fonts/[name].[contenthash][ext]',
+            filename: "__cdn__/fonts/[name].[contenthash][ext]",
           },
         },
         {
           test: /\.(png|svg|jpg|gif|webp|avif)$/,
           exclude: /\.(font\.svg)$/,
-          type: 'asset',
+          type: "asset",
           generator: {
-            filename: '__cdn__/images/[name].[contenthash][ext]',
+            filename: "__cdn__/images/[name].[contenthash][ext]",
           },
         },
         {
           test: /\.(mp4|mov|webm)$/,
-          type: 'asset',
+          type: "asset",
           generator: {
-            filename: '__cdn__/videos/[name].[contenthash][ext]',
+            filename: "__cdn__/videos/[name].[contenthash][ext]",
           },
         },
         {
           test: /\.ai$/,
           use: {
-            loader: 'ai2react-loader',
+            loader: "ai2react-loader",
           },
         },
       ],
     },
     plugins: [
       new webpack.DefinePlugin({
-        NODE_ENV: JSON.stringify('development'),
+        NODE_ENV: JSON.stringify("development"),
         PROJECT_BASE_URL: JSON.stringify(canonical()),
-        PROJECT_DATA_URL: JSON.stringify('/live-data'),
-        GOOGLE_ANALYTICS_ID: JSON.stringify(''),
+        PROJECT_DATA_URL: JSON.stringify("/live-data"),
+        GOOGLE_ANALYTICS_ID: JSON.stringify(""),
       }),
-      ...Object.keys(entrypoints).map(name => (
-        new HtmlWebpackPlugin({
-          filename: `${name}.html`,
-          template: 'src/index.html',
-          templateParameters: {
-            content: `<div class="ap-interactive" data-interactive="${utils.project.metadata.slug}" data-entrypoint="${name}"></div>`,
-          },
-          chunks: [name],
-        })
-      )),
-      ...Object.keys(entrypoints).map(name => {
+      ...Object.keys(entrypoints).map(
+        (name) =>
+          new HtmlWebpackPlugin({
+            filename: `${name}.html`,
+            template: "src/index.html",
+            templateParameters: {
+              content: `<div class="ap-interactive" data-interactive="${utils.project.metadata.slug}" data-entrypoint="${name}"></div>`,
+            },
+            chunks: [name],
+          })
+      ),
+      ...Object.keys(entrypoints).map((name) => {
         const page = `${name}.html`
         return new MetataggerPlugin({
           pages: [page],
@@ -178,13 +185,13 @@ const config = (env, argv, port, args) => {
       new CopyPlugin({
         patterns: [
           {
-            from: 'static/**',
+            from: "static/**",
             to: ({ absoluteFilename }) => {
-              return path.relative('./static', absoluteFilename)
+              return path.relative("./static", absoluteFilename)
             },
           },
-          ...Object.keys(pages).map(name => ({
-            from: 'package.json',
+          ...Object.keys(pages).map((name) => ({
+            from: "package.json",
             to: `${name}-metadata.json`,
             transform: () => {
               const page = `${name}.html`
@@ -192,7 +199,10 @@ const config = (env, argv, port, args) => {
                 image: shareImg({ page }),
                 url: canonical({ page }),
                 updated: new Date(),
-                ...seo.pageMetadata(utils.project, { page, contentDir: utils.contentDir }),
+                ...seo.pageMetadata(utils.project, {
+                  page,
+                  contentDir: utils.contentDir,
+                }),
               })
             },
           })),
@@ -203,5 +213,6 @@ const config = (env, argv, port, args) => {
 }
 
 module.exports = (env, argv) =>
-  portfinder.getPortPromise()
-    .then(port => config(env, argv, port, parseArgs(env)))
+  portfinder
+    .getPortPromise()
+    .then((port) => config(env, argv, port, parseArgs(env)))
