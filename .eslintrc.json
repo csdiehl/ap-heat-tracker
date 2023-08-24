@@ -1,5 +1,8 @@
 {
-  "extends": "@associatedpress/eslint-config-interact",
+  "extends": [
+    "@associatedpress/eslint-config-interact",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "globals": {
     "NODE_ENV": "readonly",
     "PROJECT_BUILD_TIME": "readonly",
@@ -7,5 +10,17 @@
     "PROJECT_BASE_URL": "readonly",
     "PROJECT_DATA_URL": "readonly",
     "GOOGLE_ANALYTICS_ID": "readonly"
+  },
+  "rules": {
+    "no-unexpected-multiline": "off",
+    "semi": ["error", "never"],
+    "comma-dangle": [
+      "error",
+      {
+        "imports": "always-multiline",
+        "arrays": "always-multiline",
+        "objects": "always-multiline"
+      }
+    ]
   }
 }

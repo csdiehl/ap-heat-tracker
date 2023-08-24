@@ -9,8 +9,9 @@ import {
   selectedCityLayer,
 } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth } from "./settings"
+import { FtoC } from "./utils"
 
-function BaseMap({ data, selectedCity }) {
+function BaseMap({ data, selectedCity, tempScale }) {
   const mapRef = useRef()
   const [popupInfo, setPopupInfo] = useState(null)
   // const latestTemp = stations && stations[stations.length - 1]
@@ -55,7 +56,7 @@ function BaseMap({ data, selectedCity }) {
             anchor="bottom"
             onClose={() => setPopupInfo(false)}
           >
-            It is roughly <strong>{Math.abs(popupInfo.diff)} F</strong>{" "}
+            It is roughly <strong>{`${Math.abs(popupInfo.diff)} F`}</strong>{" "}
             {popupInfo.diff < 0 ? "colder" : "warmer"} in{" "}
             <strong style={{ textTransform: "capitalize" }}>
               {popupInfo.city}, {popupInfo.country}
