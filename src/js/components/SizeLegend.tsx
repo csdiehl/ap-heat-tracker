@@ -1,13 +1,6 @@
 import React from "react"
-import styled from "styled-components"
-import { SubHeading } from "./settings"
+import { SmallCaps, SVGLabel } from "./settings"
 import { citySizes } from "./settings"
-
-const Label = styled.text`
-  font-family: AP Var;
-  font-size: 0.75rem;
-  fill: #fff;
-`
 
 const fireSizes = new Map([
   [citySizes[3], "1M or more"],
@@ -19,7 +12,7 @@ const fireSizes = new Map([
 const SizeLegend = () => {
   return (
     <div>
-      <SubHeading>City Population</SubHeading>
+      <SmallCaps>City Population</SmallCaps>
       <svg width={160} height={52}>
         {[...fireSizes.keys()].map((s, i) => (
           <g key={i}>
@@ -31,9 +24,9 @@ const SizeLegend = () => {
               fill="transparent"
               stroke="#FFF"
             ></circle>
-            <Label x={50} y={22 + i * 14}>
+            <SVGLabel x={50} y={22 + i * 14}>
               {fireSizes.get(s)}
-            </Label>
+            </SVGLabel>
           </g>
         ))}
       </svg>

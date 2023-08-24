@@ -26,6 +26,7 @@ export const joinTemperatures = (cities: any, temps: TempReading[]): void => {
     )
 
     city.properties.diff = temp?.diff ?? 0
+    city.properties.temp = temp?.temp
   })
 }
 
@@ -37,5 +38,5 @@ export const dataForTable = (data: any) =>
     .map((d: any) => d.properties)
 
 export const CtoF = (t: number): number => t * (9 / 5) + 32
-export const FtoC = (t: number): number => (t - 32) * (5 / 9)
+export const FtoC = (t: number): string => ((t - 32) * (5 / 9)).toFixed(1)
 export const FtoCdelta = (t: number): string => (t * (5 / 9)).toFixed(1)

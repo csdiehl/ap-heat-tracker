@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from "react"
 import BaseMap from "../../components/Map"
 import Legend from "../../components/Legend"
-import { Title, Text, citiesLink, tempsLink } from "../../components/settings"
+import {
+  Text,
+  citiesLink,
+  tempsLink,
+  Heading2,
+  Heading4,
+} from "../../components/settings"
 import Tooltip from "../../components/Tooltip"
 import Table from "../../components/Table"
 import {
@@ -72,13 +78,13 @@ function HeatTracker() {
             gridArea: "title",
           }}
         >
-          <Title>Extreme Heat Tracker</Title>
+          <Heading2>Extreme Heat Tracker</Heading2>
           <Tooltip boundary={containerRef.current} />
         </div>
 
-        <Text>
+        <Heading4>
           Updated with data from {formatDate(date[0])} to {formatDate(date[1])}{" "}
-        </Text>
+        </Heading4>
       </InfoBox>
       <Legend />
       <BaseMap

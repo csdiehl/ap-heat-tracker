@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { typography } from "@apdata/core"
 
 export const initialViewState = {
   latitude: 30.7751,
@@ -57,15 +58,37 @@ export const tempsLink =
   "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/latest_station_temps.json"
 
 // design system styles
-export const Title = styled.h1`
-  color: #000;
-  font-family: AP Var;
-  font-size: 1.5rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 2rem; /* 133.333% */
-  color: #fff;
+export const Heading2 = styled(typography.Heading2)`
   margin: 0;
+  color: #fff;
+`
+
+export const Heading4 = styled(typography.Heading4)`
+  margin: 0;
+  color: lightgrey;
+`
+
+export const SmallCaps = styled(typography.SmallCaps)`
+  margin: 4px 0px;
+  color: #fff;
+`
+
+export const LabelBold = styled.p`
+  margin: 0;
+  color: #fff;
+  ${typography.gfxLabelRegularStyles}
+`
+
+export const LabelRegular = styled.p`
+  margin: 0;
+  color: lightgrey;
+  ${typography.gfxLabelSubtleStyles}
+`
+
+export const SVGLabel = styled.text`
+  margin: 0;
+  fill: lightgrey;
+  ${typography.gfxLabelSubtleStyles}
 `
 
 export const SubHeading = styled.h3`
