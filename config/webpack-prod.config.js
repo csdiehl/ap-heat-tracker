@@ -160,17 +160,19 @@ const getConfig = (entrypoints, assetPublicPath) => ({
       PROJECT_DATA_URL: JSON.stringify(`${baseUrl}live-data`),
       GOOGLE_ANALYTICS_ID: JSON.stringify("UA-19104461-33"),
     }),
-    ...Object.keys(entrypoints).map(
-      (name) =>
-        new HtmlWebpackPlugin({
-          filename: `${name}.html`,
-          template: "src/index.html",
-          templateParameters: {
-            content: `<div class="ap-interactive" data-interactive="${utils.project.metadata.slug}" data-entrypoint="${name}"></div>`,
-          },
-          chunks: [name],
-        })
-    ),
+    ...Object.keys(entrypoints)
+      .map((name) => name.replace(".tsx", ""))
+      .map(
+        (name) =>
+          new HtmlWebpackPlugin({
+            filename: `${name}.html`,
+            template: "src/index.html",
+            templateParameters: {
+              content: `<div class="ap-interactive" data-interactive="${utils.project.metadata.slug}" data-entrypoint="${name}"></div>`,
+            },
+            chunks: [name],
+          })
+      ),
     ...Object.keys(entrypoints).map((name) => {
       const page = `${name}.html`
       return new MetataggerPlugin({

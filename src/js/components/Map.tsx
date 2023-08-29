@@ -1,25 +1,27 @@
 import maplibre from "maplibre-gl"
+import { MapLayerMouseEvent } from "mapbox-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import React, { useRef, useState } from "react"
 import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
-import {
-  cities,
-  clusterCounts,
-  clusteredCities,
-  selectedCityLayer,
-} from "./MapStyles"
+import { cities, clusterCounts, clusteredCities } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth } from "./settings"
 import FormattedPopup from "./FormattedPopup"
+import { TempScale } from "../types"
 
-function BaseMap({ data, selectedCity, tempScale }) {
+interface MapProps {
+  data: any
+  tempScale: TempScale
+}
+
+function BaseMap({ data, tempScale }: MapProps) {
   const mapRef = useRef()
   const [popupInfo, setPopupInfo] = useState(null)
   // const latestTemp = stations && stations[stations.length - 1]
 
-  function handleMapClick(event) {
+  function handleMapClick(event: MapLayerMouseEvent) {
     if (!event?.features || event.features.length === 0) return
     const data = event?.features[0]?.properties
-    if (data?.diff) {
+    if (data?.diff && event?.features[0]?.geometry?.type === "Point") {
       const coords = event?.features[0]?.geometry?.coordinates ?? []
       setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
     }
@@ -66,12 +68,6 @@ function BaseMap({ data, selectedCity, tempScale }) {
             />
           </Popup>
         )}
-        <Layer
-          source="city-data"
-          {...selectedCityLayer}
-          filter={["==", ["get", "city"], selectedCity]}
-          layout={{ visibility: selectedCity ? "visible" : "none" }}
-        ></Layer>
         <NavigationControl
           style={{ backgroundColor: "lightgrey" }}
           position="top-right"

@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { typography } from "@apdata/core"
 import { red } from "@apdata/core/colors"
+import { Month } from "../types"
 
 export const initialViewState = {
   latitude: 30.7751,
@@ -14,7 +15,7 @@ export const colors = Object.entries(red)
   .map((d) => d[1])
   .slice(0, 8)
 
-export function colorScale(temp) {
+export function colorScale(temp: number): string {
   switch (true) {
     case temp <= -10:
       return colors[0]
@@ -105,7 +106,11 @@ export const Text = styled.h4`
   margin: 5px 0px 0px;
 `
 
-export const thisMonth = new Date().toLocaleString("default", { month: "long" })
+export const thisMonth = new Date().toLocaleString("default", {
+  month: "long",
+})
+
+console.log(thisMonth)
 
 export const breakpoints = {
   mobile: "max-width: 425px",

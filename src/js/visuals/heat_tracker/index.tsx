@@ -14,18 +14,18 @@ import {
   joinTemperatures,
 } from "../../components/utils"
 import { Container, InfoBox, TempToggle } from "./styles"
+import { TempScale } from "../../types"
 
 function HeatTracker() {
-  const [date, setDate] = useState([0, 0])
+  const [date, setDate] = useState<[string, string]>(["", ""])
   const containerRef = useRef()
   const [data, setData] = useState(null)
-  const [selectedCity, setSelectedCity] = useState(null)
-  const [tempScale, setTempScale] = useState("Farenheit")
+  const [tempScale, setTempScale] = useState<TempScale>("Farenheit")
 
   // remove cities with no data
   const filteredData = data && {
     ...data,
-    features: data.features.filter((d) => d?.properties?.diff > 0),
+    features: data.features.filter((d: any) => d?.properties?.diff > 0),
   }
 
   useEffect(() => {
@@ -37,9 +37,6 @@ function HeatTracker() {
 
       joinTemperatures(cities, temps)
       const [firstDate, lastDate] = findDateExtent(temps)
-
-      console.log(cities)
-
       setData(cities)
       setDate([lastDate, firstDate])
     }
@@ -52,8 +49,9 @@ function HeatTracker() {
       <TempToggle
         key={tempScale}
         onClick={() =>
-          setTempScale((prev) =>
-            prev === "Farenheit" ? "Celcius" : "Farenheit"
+          setTempScale(
+            (prev: TempScale): TempScale =>
+              prev === "Farenheit" ? "Celsius" : "Farenheit"
           )
         }
       >
@@ -77,12 +75,7 @@ function HeatTracker() {
         </Heading4>
       </InfoBox>
       <Legend />
-      <BaseMap
-        tempScale={tempScale}
-        selectedCity={selectedCity}
-        style={{ gridArea: "map" }}
-        data={filteredData}
-      />
+      <BaseMap tempScale={tempScale} data={filteredData} />
     </Container>
   )
 }
@@ -92,9 +85,5 @@ HeatTracker.visual = {
   chatter: "",
   footerProps: { credit: "AP Data Team" },
 }
-
-HeatTracker.propTypes = {}
-
-HeatTracker.defaultProps = {}
 
 export default HeatTracker

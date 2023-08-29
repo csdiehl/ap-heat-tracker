@@ -1,5 +1,4 @@
-import { TempReading, TempScale } from "../types"
-import React from "react"
+import { TempReading } from "../types"
 
 export const formatDate = (dateString: string): string =>
   new Date(dateString).toLocaleDateString("en-US", {

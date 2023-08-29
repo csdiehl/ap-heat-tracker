@@ -62,7 +62,12 @@ const content = (
   </>
 )
 
-const Tooltip = ({ boundary, openSide = "top" }) => (
+interface Props {
+  boundary: HTMLElement
+  openSide?: "top" | "right" | "bottom" | "left"
+}
+
+const Tooltip = ({ boundary, openSide = "top" }: Props) => (
   <Popover.Root>
     <Popover.Trigger asChild>
       <Button aria-label="Information">

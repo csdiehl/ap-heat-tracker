@@ -7,7 +7,7 @@ type PopupInfo = Pick<CityProperties, "city" | "diff" | "country">
 interface Props {
   scale: TempScale
   info: PopupInfo
-  month: Month
+  month: string
 }
 
 const FormattedPopup = ({ scale, info, month }: Props) => {

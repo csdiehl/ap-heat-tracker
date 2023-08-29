@@ -1,8 +1,10 @@
+import { CircleLayer, SymbolLayer } from "mapbox-gl"
 import { colors, citySizes } from "./settings"
+import { ExpressionSpecification } from "maplibre-gl"
 
-const colorScale = [
+const colorScale: ExpressionSpecification = [
   "step",
-  ["get", "diff"],
+  ["number", ["get", "diff"]],
   colors[0],
   -10,
   colors[1],
@@ -20,7 +22,7 @@ const colorScale = [
   colors[7],
 ]
 
-export const cities = {
+export const cities: CircleLayer = {
   id: "cities",
   source: "city-data",
   type: "circle",
@@ -43,7 +45,7 @@ export const cities = {
   },
 }
 
-export const clusteredCities = {
+export const clusteredCities: CircleLayer = {
   id: "clusters",
   type: "circle",
   source: "cities",
@@ -68,7 +70,7 @@ export const clusteredCities = {
   },
 }
 
-export const clusterCounts = {
+export const clusterCounts: SymbolLayer = {
   id: "cluster-count",
   type: "symbol",
   source: "cities",
@@ -82,18 +84,5 @@ export const clusterCounts = {
     "text-color": "lightgrey",
     "text-halo-color": "#121212",
     "text-halo-width": 1,
-  },
-}
-
-export const selectedCityLayer = {
-  id: "cities-highlight",
-  source: "city-data",
-  type: "circle",
-  paint: {
-    "circle-color": "black",
-    "circle-opacity": 0.3,
-    "circle-stroke-width": 3,
-    "circle-stroke-color": colors[5],
-    "circle-radius": 20,
   },
 }

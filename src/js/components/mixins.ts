@@ -8,6 +8,5 @@ export const CardBackground = `
 export const AbsolutePos = `
   position: absolute;
     z-index: 1;
-transfrom: translate3d(0,0,0);
-
+    transform: translate3d(0,0,0);
 `
