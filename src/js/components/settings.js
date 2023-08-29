@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { typography } from "@apdata/core"
+import { red } from "@apdata/core/colors"
 
 export const initialViewState = {
   latitude: 30.7751,
@@ -9,16 +10,9 @@ export const initialViewState = {
   pitch: 0,
 }
 
-export const colors = [
-  "#CCEEF9",
-  "#00ABE2",
-  "#006788",
-  "#C47A0A",
-  "#F9C16D",
-  "#FBD69E",
-  "#FDEACE",
-  "#F9ADB3",
-]
+export const colors = Object.entries(red)
+  .map((d) => d[1])
+  .slice(0, 8)
 
 export function colorScale(temp) {
   switch (true) {

@@ -9,7 +9,6 @@ import {
   selectedCityLayer,
 } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth } from "./settings"
-import { FtoC } from "./utils"
 import FormattedPopup from "./FormattedPopup"
 
 function BaseMap({ data, selectedCity, tempScale }) {
@@ -19,12 +18,12 @@ function BaseMap({ data, selectedCity, tempScale }) {
 
   function handleMapClick(event) {
     if (!event?.features || event.features.length === 0) return
-    const data = event?.features[0]?.properties ?? null
-    const coords = event?.features[0]?.geometry?.coordinates ?? []
-    setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
+    const data = event?.features[0]?.properties
+    if (data?.diff) {
+      const coords = event?.features[0]?.geometry?.coordinates ?? []
+      setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
+    }
   }
-
-  console.log(popupInfo)
 
   return (
     <>
@@ -34,7 +33,8 @@ function BaseMap({ data, selectedCity, tempScale }) {
         attributionControl={false}
         ref={mapRef}
         initialViewState={initialViewState}
-        onClick={handleMapClick}
+        onMouseMove={handleMapClick}
+        onMouseLeave={() => setPopupInfo(null)}
         interactiveLayerIds={["cities"]}
         mapStyle={`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${styleEnum}?type=style&token=AAPK607d6ebb8ce04a1a9fc5e06c1b80cf4aoVSN2GntWaa8EnGF8MNnFz_3vax7S1HODpwDAlFvelNGDk8JIFYk_Db6OH9ccx-T`}
       >

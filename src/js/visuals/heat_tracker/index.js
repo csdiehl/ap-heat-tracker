@@ -1,20 +1,17 @@
-import React, { useState, useRef, useEffect } from "react"
-import BaseMap from "../../components/Map"
+import React, { useEffect, useRef, useState } from "react"
 import Legend from "../../components/Legend"
+import BaseMap from "../../components/Map"
+import Tooltip from "../../components/Tooltip"
 import {
-  Text,
-  citiesLink,
-  tempsLink,
   Heading2,
   Heading4,
+  citiesLink,
+  tempsLink,
 } from "../../components/settings"
-import Tooltip from "../../components/Tooltip"
-import Table from "../../components/Table"
 import {
-  formatDate,
   findDateExtent,
+  formatDate,
   joinTemperatures,
-  dataForTable,
 } from "../../components/utils"
 import { Container, InfoBox, TempToggle } from "./styles"
 
@@ -62,14 +59,7 @@ function HeatTracker() {
       >
         {tempScale === "Farenheit" ? "F" : "C"}
       </TempToggle>
-      {data && (
-        <Table
-          data={dataForTable(data)}
-          selectedCity={selectedCity}
-          setSelectedCity={setSelectedCity}
-          tempScale={tempScale}
-        />
-      )}
+
       <InfoBox>
         <div
           style={{

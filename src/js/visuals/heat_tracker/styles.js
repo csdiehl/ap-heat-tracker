@@ -22,15 +22,12 @@ export const Container = styled.div`
   width: 100%;
   position: relative;
   background: ${neutralGrey};
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "title map"
-    "list map";
 `
 
 export const InfoBox = styled.div`
+  ${AbsolutePos};
+  top: 16px;
+  left: 16px;
   grid-area: title;
   padding: 8px;
 `
@@ -40,7 +37,7 @@ export const TempToggle = styled.button`
   ${AbsolutePos};
   top: 16px;
   right: 64px;
-  background: lightgrey;
+  background: ${neutralGrey};
   border-radius: 50%;
   z-index: 3;
   width: 48px;
@@ -48,7 +45,7 @@ export const TempToggle = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #121212;
+  color: #fff;
   cursor: pointer;
   font-size: 1.5rem;
   font-weight: bold;
