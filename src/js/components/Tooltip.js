@@ -43,22 +43,21 @@ const Description = styled.p`
 
 const content = (
   <>
-    <SubHeading>How we calculated extreme heat</SubHeading>
+    <SubHeading>How AP calculates extreme heat</SubHeading>
     <Description>
       This temperature data comes from NOAA's National Center for Environmental
-      Information (NCEI). We started with a list of 1,000 major cities, and
-      matched each city with its nearest World Meteorological Organization
-      weather station. We only matched with stations that provide both daily
-      updates and long-term normal temperatures with at least 20 years of data.
-      If a city did not have a valid station within 5 miles, we removed it from
-      the dataset. Some cities in close proximity share the same station.
+      Information (NCEI). Starting with 1,000 major cities, AP matches each one
+      with its nearest World Meteorological Organization weather station. We
+      keep cities that had a station within 5 miles with daily updates and
+      long-term normal temperatures with at least 20 years of data. Some nearby
+      cities share a station.
     </Description>
     <Description>
-      We retrieved the latest daily average temperature from NCEI, which updates
-      on a 3-5 day time lag. We subtracted the monthly normal temperature from
-      that number to get the approximate difference from the month's usual
-      reading. NOAA and WMO calculate normals over a 30-year period, from 1991
-      to 2020, using a scientific formula that accounts for data outages.
+      AP retrieves the latest (3-5 day lag) daily average temperature from NCEI.
+      We subtract the monthly normal temperature to get the approximate
+      difference from the month's usual reading. NOAA and WMO calculate 30-year
+      normals, 1991 to 2020. Normals are similar to an average, but use a
+      formula that accounts for missing data.
     </Description>
   </>
 )

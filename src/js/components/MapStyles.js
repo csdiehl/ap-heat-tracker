@@ -74,12 +74,14 @@ export const clusterCounts = {
   source: "cities",
   filter: ["has", "point_count"],
   layout: {
-    "text-field": "{point_count_abbreviated}",
+    "text-field": "{point_count_abbreviated} cities",
     "text-font": ["Arial Regular"],
-    "text-size": 12,
+    "text-size": 14,
   },
   paint: {
-    "text-color": "#000",
+    "text-color": "lightgrey",
+    "text-halo-color": "#121212",
+    "text-halo-width": 1,
   },
 }
 
