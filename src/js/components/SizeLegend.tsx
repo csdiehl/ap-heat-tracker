@@ -1,5 +1,5 @@
 import React from "react"
-import { SmallCaps, SVGLabel } from "./settings"
+import { SVGLabel, TtHeader } from "./settings"
 import { citySizes } from "./settings"
 
 const fireSizes = new Map([
@@ -12,7 +12,7 @@ const fireSizes = new Map([
 const SizeLegend = () => {
   return (
     <div>
-      <SmallCaps>City Population</SmallCaps>
+      <TtHeader>City Population</TtHeader>
       <svg width={160} height={52}>
         {[...fireSizes.keys()].map((s, i) => (
           <g key={i}>

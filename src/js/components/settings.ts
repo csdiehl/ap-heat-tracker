@@ -58,6 +58,8 @@ export const Heading2 = styled(typography.Heading2)`
   color: #fff;
 `
 
+export const Heading3 = styled(typography.Heading3)``
+
 export const Heading4 = styled(typography.Heading4)`
   margin: 0;
   color: lightgrey;
@@ -67,6 +69,18 @@ export const SmallCaps = styled(typography.SmallCaps)`
   margin: 4px 0px;
   color: #fff;
 `
+
+export const TtHeader = styled.h3`
+  ${typography.ttHeaderStyles}
+  margin: 4px 0px;
+  color: #fff;
+`
+
+export const Note = styled.p`
+  ${typography.ttLabelStyles}
+`
+
+export const BodyText = styled(typography.Body)``
 
 export const LabelBold = styled.p`
   margin: 0;
@@ -84,26 +98,6 @@ export const SVGLabel = styled.text`
   margin: 0;
   fill: lightgrey;
   ${typography.gfxLabelSubtleStyles}
-`
-
-export const SubHeading = styled.h3`
-  color: #fff;
-  font-family: AP Var;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 1.25rem;
-  margin: 0px 0px 5px;
-`
-
-export const Text = styled.h4`
-  color: lightgrey;
-  font-family: AP Var;
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1rem;
-  margin: 5px 0px 0px;
 `
 
 export const thisMonth = new Date().toLocaleString("default", {

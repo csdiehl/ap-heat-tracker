@@ -1,5 +1,5 @@
 import React from "react"
-import { LabelRegular, colors } from "./settings"
+import { Heading3, LabelRegular, TtHeader, colors } from "./settings"
 import styled from "styled-components"
 import { SmallCaps, breakpoints } from "./settings"
 import SizeLegend from "./SizeLegend"
@@ -12,6 +12,7 @@ const Container = styled.div`
   ${CardBackground}
   display: flex;
   gap: 16px;
+  backdrop-filter: blur(2px);
 
   @media (${breakpoints.mobile}) {
     bottom: 0;
@@ -37,13 +38,15 @@ const Legend = () => {
   return (
     <Container>
       <div style={{ maxWidth: "200px" }}>
-        <SmallCaps>Difference from 1991-2020 Temperature Normal</SmallCaps>
+        <TtHeader>Difference from 1991-2020 Temperature Normal</TtHeader>
         <Colors>
           {colors.map((c) => (
             <Patch key={c} color={c}></Patch>
           ))}
         </Colors>
-        <LabelRegular>Neutral → Warmer</LabelRegular>
+        <LabelRegular style={{ margin: "4px 0px" }}>
+          Neutral → Warmer
+        </LabelRegular>
         <div
           style={{
             display: "flex",

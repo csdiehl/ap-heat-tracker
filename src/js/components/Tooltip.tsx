@@ -1,7 +1,7 @@
 import * as Popover from "@radix-ui/react-popover"
 import React from "react"
 import styled, { keyframes } from "styled-components"
-import { SubHeading } from "./settings"
+import { Heading3, Note, TtHeader } from "./settings"
 
 const FadeIn = keyframes`
 0% {
@@ -43,22 +43,22 @@ const Description = styled.p`
 
 const content = (
   <>
-    <SubHeading>How AP calculates extreme heat</SubHeading>
-    <Description>
+    <TtHeader>How AP calculates extreme heat</TtHeader>
+    <Note>
       This temperature data comes from NOAA's National Center for Environmental
       Information (NCEI). Starting with 1,000 major cities, AP matches each one
       with its nearest World Meteorological Organization weather station. We
       keep cities that had a station within 5 miles with daily updates and
       long-term normal temperatures with at least 20 years of data. Some nearby
       cities share a station.
-    </Description>
-    <Description>
+    </Note>
+    <Note>
       AP retrieves the latest (3-5 day lag) daily average temperature from NCEI.
       We subtract the monthly normal temperature to get the approximate
       difference from the month's usual reading. NOAA and WMO calculate 30-year
       normals, 1991 to 2020. Normals are similar to an average, but use a
       formula that accounts for missing data.
-    </Description>
+    </Note>
   </>
 )
 
