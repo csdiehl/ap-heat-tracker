@@ -1,7 +1,7 @@
 import React from "react"
 import { LabelRegular, colors } from "./settings"
 import styled from "styled-components"
-import { SmallCaps, Text, breakpoints } from "./settings"
+import { SmallCaps, breakpoints } from "./settings"
 import SizeLegend from "./SizeLegend"
 import { CardBackground, AbsolutePos } from "./mixins"
 
@@ -39,11 +39,11 @@ const Legend = () => {
       <div style={{ maxWidth: "200px" }}>
         <SmallCaps>Difference from 1991-2020 Temperature Normal</SmallCaps>
         <Colors>
-          {colors.slice(3, colors.length).map((c) => (
+          {colors.map((c) => (
             <Patch key={c} color={c}></Patch>
           ))}
         </Colors>
-        <LabelRegular>Colder → Warmer</LabelRegular>
+        <LabelRegular>Neutral → Warmer</LabelRegular>
         <div
           style={{
             display: "flex",

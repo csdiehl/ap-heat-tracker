@@ -10,36 +10,37 @@ export const initialViewState = {
   pitch: 0,
 }
 
-export const colors = Object.entries(red)
-  .map((d) => d[1])
-  .slice(0, 8)
+export const colors = [
+  "#121212",
+  ...Object.entries(red)
+    .slice(0, 7)
+    .map((d) => d[1])
+    .reverse() // change this to go back to dark - light
+    .slice(0, 5),
+]
 
 export function colorScale(temp: number): string {
   switch (true) {
-    case temp <= -10:
-      return colors[0]
-    case temp <= -5:
-      return colors[1]
     case temp <= 0:
-      return colors[2]
+      return colors[0]
     case temp <= 2:
-      return colors[3]
+      return colors[1]
     case temp <= 4:
-      return colors[4]
+      return colors[2]
     case temp <= 6:
-      return colors[5]
+      return colors[3]
     case temp <= 8:
-      return colors[6]
+      return colors[4]
     case temp > 8:
-      return colors[7]
+      return colors[5]
     default:
-      return "#FFF"
+      return colors[0]
   }
 }
 
 export const neutralGrey = "rgb(29, 34, 36)"
 
-export const citySizes = [2, 5, 10, 15]
+export const citySizes = [2, 4, 8, 16]
 
 export const styleEnum = "c11ce4f7801740b2905eb03ddc963ac8"
 

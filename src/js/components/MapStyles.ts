@@ -2,24 +2,22 @@ import { CircleLayer, SymbolLayer } from "mapbox-gl"
 import { colors, citySizes } from "./settings"
 import { ExpressionSpecification } from "maplibre-gl"
 
+const breaks = [0, 2, 4, 6, 8]
+
 const colorScale: ExpressionSpecification = [
   "step",
   ["number", ["get", "diff"]],
   colors[0],
-  -10,
-  colors[1],
-  -5,
-  colors[2],
   0,
-  colors[3],
+  colors[1],
   2,
-  colors[4],
+  colors[2],
   4,
-  colors[5],
+  colors[3],
   6,
-  colors[6],
+  colors[4],
   8,
-  colors[7],
+  colors[5],
 ]
 
 export const cities: CircleLayer = {
@@ -28,10 +26,10 @@ export const cities: CircleLayer = {
   type: "circle",
   paint: {
     "circle-color": colorScale,
-    "circle-opacity": 0.3,
-    "circle-stroke-width": 1,
+    "circle-stroke-opacity": 0.3,
+    "circle-radius": 3,
     "circle-stroke-color": colorScale,
-    "circle-radius": [
+    "circle-stroke-width": [
       "step",
       ["get", "pop"],
       citySizes[0],

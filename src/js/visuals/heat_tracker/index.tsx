@@ -25,7 +25,7 @@ function HeatTracker() {
   // remove cities with no data
   const filteredData = data && {
     ...data,
-    features: data.features.filter((d: any) => d?.properties?.diff > 0),
+    features: data.features.filter((d: any) => d?.properties?.diff),
   }
 
   useEffect(() => {
