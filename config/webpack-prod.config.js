@@ -24,10 +24,12 @@ const entrypoints = {
 const local = !!process.env.LOCAL
 const port = process.env.PORT
 const preview = !!process.env.PREVIEW
+const apnewsQa = !!process.env.APNEWS_QA
+const apnewsProd = !!process.env.APNEWS_PROD
 
 const baseUrl = seo.canonical(utils.project, { local, port, preview })
 
-const outputFolder = "public"
+const outputFolder = apnewsQa || apnewsProd ? "apnews-public" : "public"
 
 const getConfig = (entrypoints, assetPublicPath) => ({
   mode: "production",
@@ -158,7 +160,7 @@ const getConfig = (entrypoints, assetPublicPath) => ({
       NODE_ENV: JSON.stringify("production"),
       PROJECT_BASE_URL: JSON.stringify(baseUrl),
       PROJECT_DATA_URL: JSON.stringify(`${baseUrl}live-data`),
-      GOOGLE_ANALYTICS_ID: JSON.stringify("UA-19104461-33"),
+      GOOGLE_ANALYTICS_ID: JSON.stringify("UA-19104461-7"),
     }),
     ...Object.keys(entrypoints).map(
       (name) =>
@@ -241,5 +243,5 @@ del.sync([path.resolve(utils.repoRoot, outputFolder, "**/*")])
 module.exports = [
   getConfig(pages, "./"),
   // Different relative public path for visuals since they are not served from the root
-  getConfig(visuals, "../"),
+  // getConfig(visuals, "../"),
 ]
