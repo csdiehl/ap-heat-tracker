@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import { typography } from "@apdata/core"
 import { red } from "@apdata/core/colors"
-import { Month } from "../types"
 
 export const initialViewState = {
   latitude: 30.7751,
@@ -47,7 +46,7 @@ export const styleEnum = "c11ce4f7801740b2905eb03ddc963ac8"
 //  "42410a35dc9445eeb65d10da1a5f62f0"
 
 export const citiesLink =
-  "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/cities_stations.json"
+  "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/cities_stations_8.30.json"
 
 export const tempsLink =
   "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/latest_station_temps.json"
