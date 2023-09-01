@@ -45,8 +45,11 @@ function BaseMap({ data, tempScale }: MapProps) {
           type="raster"
           tileSize={512}
           tiles={[tilesLink]}
+          scheme="tms"
+          minzoom={0}
+          maxzoom={4}
         >
-          <Layer {...heatTiles} />
+          <Layer minzoom={0} maxzoom={4} {...heatTiles} />
         </Source>
         <Source
           id="city-data"
