@@ -3,8 +3,8 @@ import { MapLayerMouseEvent } from "mapbox-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import React, { useRef, useState } from "react"
 import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
-import { cities, clusterCounts, clusteredCities } from "./MapStyles"
-import { initialViewState, styleEnum, thisMonth } from "./settings"
+import { cities, clusterCounts, clusteredCities, heatTiles } from "./MapStyles"
+import { initialViewState, styleEnum, thisMonth, tilesLink } from "./settings"
 import FormattedPopup from "./FormattedPopup"
 import { TempScale } from "../types"
 
@@ -40,6 +40,14 @@ function BaseMap({ data, tempScale }: MapProps) {
         interactiveLayerIds={["cities"]}
         mapStyle={`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${styleEnum}?type=style&token=AAPK607d6ebb8ce04a1a9fc5e06c1b80cf4aoVSN2GntWaa8EnGF8MNnFz_3vax7S1HODpwDAlFvelNGDk8JIFYk_Db6OH9ccx-T`}
       >
+        <Source
+          id="heat-tiles-data"
+          type="raster"
+          tileSize={512}
+          tiles={[tilesLink]}
+        >
+          <Layer {...heatTiles} />
+        </Source>
         <Source
           id="city-data"
           type="geojson"

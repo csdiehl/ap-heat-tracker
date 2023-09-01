@@ -1,4 +1,4 @@
-import { CircleLayer, SymbolLayer } from "mapbox-gl"
+import { CircleLayer, RasterLayer, SymbolLayer } from "mapbox-gl"
 import { colors, citySizes } from "./settings"
 import { ExpressionSpecification } from "maplibre-gl"
 
@@ -82,5 +82,14 @@ export const clusterCounts: SymbolLayer = {
     "text-color": "lightgrey",
     "text-halo-color": "#121212",
     "text-halo-width": 1,
+  },
+}
+
+export const heatTiles: RasterLayer = {
+  id: "heat-tiles",
+  type: "raster",
+  source: "heat-tiles-data",
+  paint: {
+    "raster-opacity": 0.9,
   },
 }

@@ -46,11 +46,14 @@ export const styleEnum = "c11ce4f7801740b2905eb03ddc963ac8"
 
 //  "42410a35dc9445eeb65d10da1a5f62f0"
 
-export const citiesLink =
-  "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/cities_stations_8.30.json"
+const S3 =
+  "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/"
 
-export const tempsLink =
-  "https://s3.amazonaws.com/data.ap.org/projects/2023/cfs/data/processed/latest_station_temps.json"
+export const citiesLink = `${S3}cities_stations_8.30.json`
+
+export const tempsLink = `${S3}latest_station_temps.json`
+
+export const tilesLink = `${S3}current_cfs/tiles/{z}/{x}/{y}.png`
 
 // design system styles
 export const Heading2 = styled(typography.Heading2)`
