@@ -25,14 +25,15 @@ export const Container = styled.div`
   position: relative;
   background: ${neutralGrey};
   display: grid;
-  grid-template-rows: 80% 20%;
+  grid-template-rows: minmax(0, 1fr) 200px;
+  grid-template-columns: 100%;
   grid-template-areas: "map" "chart";
+  box-sizing: border-box;
 `
 
 export const MapContainer = styled.div`
   position: relative;
   grid-area: map;
-  width: 100%;
 `
 
 export const InfoBox = styled.div`
