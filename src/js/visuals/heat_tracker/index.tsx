@@ -13,14 +13,19 @@ import {
   formatDate,
   joinTemperatures,
 } from "../../components/utils"
-import { Container, InfoBox, TempToggle } from "./styles"
+import { Container, InfoBox, TempToggle, MapContainer } from "./styles"
 import { TempScale } from "../../types"
+import { useData } from "ap-react-hooks"
+import LineChart from "../../components/LineChart"
 
 function HeatTracker() {
   const [date, setDate] = useState<[string, string]>(["", ""])
   const containerRef = useRef()
   const [data, setData] = useState(null)
   const [tempScale, setTempScale] = useState<TempScale>("Farenheit")
+  const lineChartData = useData(
+    "https://climatereanalyzer.org/clim/t2_daily/json/cfsr_world_t2_day.json"
+  )
 
   // remove cities with no data
   const filteredData = data && {
@@ -46,36 +51,41 @@ function HeatTracker() {
 
   return (
     <Container ref={containerRef}>
-      <TempToggle
-        key={tempScale}
-        onClick={() =>
-          setTempScale(
-            (prev: TempScale): TempScale =>
-              prev === "Farenheit" ? "Celsius" : "Farenheit"
-          )
-        }
-      >
-        {tempScale === "Farenheit" ? "F" : "C"}
-      </TempToggle>
-
-      <InfoBox>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gridArea: "title",
-          }}
+      <MapContainer>
+        <TempToggle
+          key={tempScale}
+          onClick={() =>
+            setTempScale(
+              (prev: TempScale): TempScale =>
+                prev === "Farenheit" ? "Celsius" : "Farenheit"
+            )
+          }
         >
-          <Heading2>Extreme Heat Tracker</Heading2>
-          <Tooltip boundary={containerRef.current} />
-        </div>
+          {tempScale === "Farenheit" ? "F" : "C"}
+        </TempToggle>
 
-        <Heading4>
-          Updated with data from {formatDate(date[0])} to {formatDate(date[1])}{" "}
-        </Heading4>
-      </InfoBox>
-      <Legend />
-      <BaseMap tempScale={tempScale} data={filteredData} />
+        <InfoBox>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gridArea: "title",
+            }}
+          >
+            <Heading2>Extreme Heat Tracker</Heading2>
+            <Tooltip boundary={containerRef.current} />
+          </div>
+
+          <Heading4>
+            Updated with data from {formatDate(date[0])} to{" "}
+            {formatDate(date[1])}{" "}
+          </Heading4>
+        </InfoBox>
+        <BaseMap tempScale={tempScale} data={filteredData}></BaseMap>
+        <Legend />
+      </MapContainer>
+
+      <LineChart data={lineChartData} />
     </Container>
   )
 }

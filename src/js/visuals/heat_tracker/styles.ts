@@ -2,6 +2,8 @@ import styled, { keyframes } from "styled-components"
 import { AbsolutePos } from "../../components/mixins"
 import { neutralGrey } from "../../components/settings"
 
+const totalHeight = "800px"
+
 const spin = keyframes`
   0% {
     transform: rotate(0deg);
@@ -18,10 +20,19 @@ const spin = keyframes`
 export const Container = styled.div`
   padding: 8px;
   border-radius: 5px;
-  height: 700px;
+  height: ${totalHeight};
   width: 100%;
   position: relative;
   background: ${neutralGrey};
+  display: grid;
+  grid-template-rows: 80% 20%;
+  grid-template-areas: "map" "chart";
+`
+
+export const MapContainer = styled.div`
+  position: relative;
+  grid-area: map;
+  width: 100%;
 `
 
 export const InfoBox = styled.div`

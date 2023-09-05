@@ -1,7 +1,7 @@
 import maplibre from "maplibre-gl"
 import { MapLayerMouseEvent } from "mapbox-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
-import React, { useRef, useState } from "react"
+import React, { ReactComponentElement, useRef, useState } from "react"
 import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
 import { cities, clusterCounts, clusteredCities, heatTiles } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth, tilesLink } from "./settings"
@@ -30,7 +30,6 @@ function BaseMap({ data, tempScale }: MapProps) {
   return (
     <>
       <Map
-        style={{ gridArea: "map" }}
         mapLib={maplibre}
         attributionControl={false}
         ref={mapRef}
