@@ -16,7 +16,7 @@ import {
 import { Container, InfoBox, TempToggle, MapContainer } from "./styles"
 import { TempScale } from "../../types"
 import useData from "../../components/useData"
-import LineChart from "../../components/LineChart"
+import LineChart from "../../components/LineChart/LineChart"
 
 function HeatTracker() {
   const [date, setDate] = useState<[string, string]>(["", ""])
