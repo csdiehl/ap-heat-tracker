@@ -82,7 +82,7 @@ function HeatTracker() {
       <BaseMap tempScale={tempScale} data={filteredData}></BaseMap>
       <Legend />
 
-      <LineChart data={lineChartData} />
+      <LineChart tempScale={tempScale} data={lineChartData} />
     </Container>
   )
 }

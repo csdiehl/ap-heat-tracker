@@ -17,12 +17,13 @@ import {
   MainLine,
 } from "./styles"
 import { formatData, sliceDataByTime } from "./utils"
+import { FtoC, FtoCdelta } from "../utils"
 
 const margin = { bottom: 20, top: 16, right: 0, left: 16 }
 const timePeriods = ["year", "6_months", "3_months", "1_month"]
 
 // component
-const LineChart = ({ data }) => {
+const LineChart = ({ tempScale, data }) => {
   const [timeFrame, setTimeFrame] = useState("year")
   const svgRef = useRef()
   const [node, dimensions] = useNodeDimensions()
@@ -107,7 +108,7 @@ const LineChart = ({ data }) => {
           </Label>
           {[1, 0.5].map((d) => (
             <Label x={width - margin.right - 40} className="grid-line-label">
-              +{d} F
+              +{tempScale === "Farenheit" ? `${d} F` : `${FtoCdelta(d)} C`}
             </Label>
           ))}
 
