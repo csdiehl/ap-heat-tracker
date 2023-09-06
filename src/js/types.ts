@@ -46,3 +46,9 @@ export type Month =
   | "jun"
   | "dec"
   | "oct"
+
+// this describes the format we expect the climate re-analyzer data to be in
+export interface ReanalyzerDataEntry {
+  name: string
+  data: number[]
+}

@@ -1,9 +1,15 @@
+import { ReanalyzerDataEntry } from "../../types"
+import { LineChartData } from "./LineChart"
+
 const averageLabel = "1979-2000 mean"
 
-const searchData = (data, label) =>
+const searchData = (data: ReanalyzerDataEntry[], label: string): number[] =>
   data.find((d) => d?.name === label)?.data?.filter((d) => d !== null)
 
-const sliceDataByTime = (data, timeFrame) => {
+const sliceDataByTime = (
+  data: LineChartData[],
+  timeFrame: string
+): LineChartData[] => {
   if (timeFrame === "year") return data
 
   const daysAgo =
@@ -11,18 +17,18 @@ const sliceDataByTime = (data, timeFrame) => {
   return data.slice(data.length - daysAgo, data.length)
 }
 
-const subtract = (a, b) => {
+const subtract = (a: number, b: number): number => {
   if (a === null) return null
   return +(a - b).toFixed(2)
 }
 
-const dateFromDay = (year, day) =>
+const dateFromDay = (year: number, day: number): string =>
   new Date(year, 0, day).toLocaleDateString("en-us", {
     month: "short",
     day: "numeric",
   })
 
-function formatData(data) {
+function formatData(data: ReanalyzerDataEntry[]): LineChartData[] {
   // get data for current year, average and difference
   const thisYearData = searchData(data, "2023")
   const lastYearData = searchData(data, "2022")

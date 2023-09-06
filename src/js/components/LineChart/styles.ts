@@ -43,7 +43,7 @@ const GridLine = styled.line`
   opacity: 0.5;
 `
 
-const Button = styled.button`
+const Button = styled.button<{ active: boolean }>`
   all: unset;
   cursor: pointer;
   background: ${(props) =>

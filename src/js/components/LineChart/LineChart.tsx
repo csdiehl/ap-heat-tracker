@@ -17,24 +17,43 @@ import {
   MainLine,
 } from "./styles"
 import { formatData, sliceDataByTime } from "./utils"
-import { FtoC, FtoCdelta } from "../utils"
+import { FtoCdelta } from "../utils"
+import { ReanalyzerDataEntry, TempScale } from "../../types"
 
-const margin = { bottom: 20, top: 16, right: 0, left: 16 }
+export interface Margin {
+  bottom: number
+  top: number
+  left: number
+  right: number
+}
+
+const margin: Margin = { bottom: 20, top: 16, right: 0, left: 16 }
 const timePeriods = ["year", "6_months", "3_months", "1_month"]
 
+interface LineChartProps {
+  tempScale: TempScale
+  data: ReanalyzerDataEntry[]
+}
+
+export interface LineChartData {
+  diff: number
+  lastYear: number
+  day: string
+}
+
 // component
-const LineChart = ({ tempScale, data }) => {
+const LineChart = ({ tempScale, data }: LineChartProps) => {
   const [timeFrame, setTimeFrame] = useState("year")
   const svgRef = useRef()
   const [node, dimensions] = useNodeDimensions()
   const { width, height } = dimensions
 
   // get data for current year, average and difference
-  const formattedData = useMemo(() => {
+  const formattedData: LineChartData[] = useMemo(() => {
     return data && formatData(data)
   }, [data])
 
-  const chartData = sliceDataByTime(formattedData, timeFrame)
+  const chartData: LineChartData[] = sliceDataByTime(formattedData, timeFrame)
 
   useEffect(() => {
     if (chartData) {
@@ -107,7 +126,11 @@ const LineChart = ({ tempScale, data }) => {
             2022
           </Label>
           {[1, 0.5].map((d) => (
-            <Label x={width - margin.right - 40} className="grid-line-label">
+            <Label
+              key={d}
+              x={width - margin.right - 40}
+              className="grid-line-label"
+            >
               +{tempScale === "Farenheit" ? `${d} F` : `${FtoCdelta(d)} C`}
             </Label>
           ))}
