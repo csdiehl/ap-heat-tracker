@@ -4,10 +4,11 @@ import { scaleLinear, scalePoint } from "d3-scale"
 import { select } from "d3-selection"
 import { area, line } from "d3-shape"
 import "d3-transition"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 import { AbsolutePos, CardBackground } from "./mixins"
 import { TtHeader, colors } from "./settings"
+import { axisBottom } from "d3-axis"
 
 const Container = styled.div`
   ${AbsolutePos}
@@ -47,7 +48,8 @@ const BaseLine = styled.line`
 `
 
 const GridLine = styled.line`
-  stroke: #555;
+  stroke: #181818;
+  opacity: 0.5;
 `
 
 const Button = styled.button`
@@ -64,52 +66,80 @@ const Button = styled.button`
   padding: 8px;
 `
 
-const margin = { bottom: 16, top: 16, right: 0, left: 0 }
-const timePeriods = ["year", "6_months", "3_months"]
+const Label = styled.text`
+  font-size: 0.75rem;
+  font-weight: bold;
+  fill: ${(props) => props.color ?? "white"};
+  alignment-baseline: middle;
+  stroke: black;
+  paint-order: stroke fill;
+`
+
+const margin = { bottom: 20, top: 16, right: 0, left: 16 }
+const timePeriods = ["year", "6_months", "3_months", "1_month"]
 
 const averageLabel = "1979-2000 mean"
 
 const searchData = (data, label) =>
   data.find((d) => d?.name === label)?.data?.filter((d) => d !== null)
 
-const sliceDataByTime = (data, timeFrame) =>
-  timeFrame === "year"
-    ? data
-    : timeFrame === "6_months"
-    ? data.slice(-24 * 7)
-    : data.slice(-12 * 7)
+const sliceDataByTime = (data, timeFrame) => {
+  if (timeFrame === "year") return data
+
+  const daysAgo =
+    timeFrame === "6_months" ? 180 : timeFrame === "3_months" ? 90 : 30
+  return data.slice(data.length - daysAgo, data.length)
+}
 
 const subtract = (a, b) => {
   if (a === null) return null
   return +(a - b).toFixed(2)
 }
 
+const dateFromDay = (year, day) =>
+  new Date(year, 0, day).toLocaleDateString("en-us", {
+    month: "short",
+    day: "numeric",
+  })
+
+function formatData(data) {
+  // get data for current year, average and difference
+  const thisYearData = searchData(data, "2023")
+  const lastYearData = searchData(data, "2022")
+  const meanData = searchData(data, averageLabel).slice(0, thisYearData?.length)
+  const diff = thisYearData.map((d, i) => subtract(d, meanData[i]))
+  const lastYearDiff = lastYearData.map((d, i) => subtract(d, meanData[i]))
+
+  // filter the data to the right time period
+  const chartData = diff.map((d, i) => ({
+    day: dateFromDay(2023, i),
+    diff: d,
+    lastYear: lastYearDiff[i],
+  }))
+
+  return chartData
+}
+
+// component
 const LineChart = ({ data }) => {
   const [timeFrame, setTimeFrame] = useState("year")
   const svgRef = useRef()
   const [node, dimensions] = useNodeDimensions()
   const { width, height } = dimensions
 
+  // get data for current year, average and difference
+  const formattedData = useMemo(() => {
+    return data && formatData(data)
+  }, [data])
+
+  const chartData = sliceDataByTime(formattedData, timeFrame)
+
   useEffect(() => {
-    if (data) {
+    if (chartData) {
       const svg = select(svgRef.current)
 
-      // get data for current year, average and difference
-      const thisYearData = searchData(data, "2023")
-      const lastYearData = searchData(data, "2022")
-      const meanData = searchData(data, averageLabel).slice(
-        0,
-        thisYearData?.length
-      )
-      const diff = thisYearData.map((d, i) => subtract(d, meanData[i]))
-
-      const lastYearDiff = lastYearData.map((d, i) => subtract(d, meanData[i]))
-
-      // filter the data to the right time period
-      const chartData = sliceDataByTime(diff, timeFrame)
-
-      const dataExtent = extent(chartData)
-      const days = [...chartData.keys()]
+      const dataExtent = extent(formattedData, (d) => d.diff)
+      const days = chartData.map((d) => d.day)
 
       const yScale = scaleLinear()
         .domain([dataExtent[0] < 0 ? dataExtent[0] : 0, dataExtent[1]])
@@ -118,27 +148,29 @@ const LineChart = ({ data }) => {
         .domain(days)
         .range([margin.left, width - margin.right])
 
-      console.log(yScale.range(), yScale.domain())
-
       // generators
       const lineGenerator = line(
-        (d, i) => xScale(i),
-        (d) => yScale(d)
+        (d) => xScale(d.day),
+        (d) => yScale(d.diff)
+      )
+
+      const line2 = line(
+        (d) => xScale(d.day),
+        (d) => yScale(d.lastYear)
       )
 
       const areaGenerator = area(
-        (d, i) => xScale(i),
-        (d, i) => yScale(lastYearDiff[i]),
-        (d) => yScale(d)
+        (d) => xScale(d.day),
+        (d) => yScale(d.lastYear),
+        (d) => yScale(d.diff)
       )
 
       const area2 = area(
-        (d, i) => xScale(i),
+        (d) => xScale(d.day),
         yScale(0),
-        (d) => yScale(d)
+        (d) => yScale(d.diff)
       )
 
-      console.log(area2(chartData))
       svg
         .selectAll("#chart-main-line")
         .transition()
@@ -149,7 +181,7 @@ const LineChart = ({ data }) => {
         .selectAll("#secondary-line")
         .transition()
         .duration(750)
-        .attr("d", lineGenerator(lastYearDiff))
+        .attr("d", line2(chartData))
 
       svg
         .selectAll("#background-area")
@@ -170,15 +202,41 @@ const LineChart = ({ data }) => {
         .attr("x2", width - margin.right)
         .attr("y1", (d) => yScale(d))
         .attr("y2", (d) => yScale(d))
+
+      svg
+        .selectAll(".grid-line-label")
+        .data([1, 0.5])
+        .attr("y", (d) => yScale(d))
+
+      const tickSpacing =
+        timeFrame === "year" ? 20 : timeFrame === "6_months" ? 10 : 5
+      const xAxis = axisBottom(xScale).tickValues(
+        xScale.domain().filter((d, i) => i % tickSpacing == 0)
+      )
+
+      svg
+        .select("#x-axis")
+        .transition()
+        .duration(750)
+        .call(xAxis)
+        .select(".domain")
+        .attr("stroke-width", 0)
+
+      svg
+        .selectAll(".y-axis-label")
+        .data([chartData[0].diff, chartData[0].lastYear])
+        .transition()
+        .duration(500)
+        .attr("y", (d) => yScale(d))
     }
-  }, [data, width, height, timeFrame])
+  }, [chartData, width, height, timeFrame])
 
   return (
     <Container>
       <div
         style={{ display: "flex", gap: "16px", justifyContent: "flex-start" }}
       >
-        <TtHeader>2-meter air temperature anomaly</TtHeader>
+        <TtHeader>Global 2-meter air temperature anomaly</TtHeader>
         <div>
           {timePeriods.map((d) => (
             <Button
@@ -195,25 +253,47 @@ const LineChart = ({ data }) => {
         <svg width={width} height={height} ref={svgRef}>
           <defs>
             <linearGradient id="gradient1" x1="0" x2="0" y1="0" y2="1">
-              <stop stopColor={colors[3]} offset="0%" />
+              <stop stopColor={"white"} offset="0%" />
               <stop stopColor={colors[0]} offset="100%" />
             </linearGradient>
           </defs>
+
           <path
             opacity={0.8}
             fill="url(#gradient1)"
             id="background-area"
           ></path>
+
           <BaseLine id="chart-base-line" className="grid-line"></BaseLine>
           <GridLine className="grid-line"></GridLine>
           <GridLine className="grid-line"></GridLine>
+
           <Area color="white" id="year-over-year-positive"></Area>
-          <MainLine color="#555" id="secondary-line"></MainLine>
-          <MainLine color={colors[3]} id="chart-main-line"></MainLine>
-          <text id="main-line-text"></text>
-          <text id="last-year-line-tex"></text>
-          <text id="baseline-text"></text>
-          <text className="axis-label">Baseline 1979 - 2000</text>
+          <MainLine color="#999" id="secondary-line"></MainLine>
+          <MainLine color={"white"} id="chart-main-line"></MainLine>
+
+          <Label x={0} y={height - margin.bottom} className="axis-label">
+            Baseline 1979 - 2000
+          </Label>
+
+          <Label x={0} className="y-axis-label">
+            2023
+          </Label>
+
+          <Label color="#999" x={0} className="y-axis-label">
+            2022
+          </Label>
+          {[1, 0.5].map((d) => (
+            <Label x={width - margin.right - 40} className="grid-line-label">
+              +{d} F
+            </Label>
+          ))}
+
+          <g
+            transform={`translate(0, ${height - margin.bottom})`}
+            color="#FFF"
+            id="x-axis"
+          ></g>
         </svg>
       </ChartWrapper>
     </Container>

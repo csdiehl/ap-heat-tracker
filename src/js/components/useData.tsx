@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react"
 
-// eslint-disable-next-line react/display-name
 const useData = (url: string) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    async function getData() {
+    async function getData(url: string) {
+      console.log("fetching data")
       const res = await fetch(url)
-      const data = await res.json()
-      return data
+
+      try {
+        const data = await res.json()
+        return data
+      } catch {
+        const res = await fetch("./fallback-data.json")
+        const data = await res.json()
+        return data
+      }
     }
 
-    getData().then((data) => setData(data))
+    getData(url).then((data) => setData(data))
   }, [url])
 
   return data

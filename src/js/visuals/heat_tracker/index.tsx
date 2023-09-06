@@ -15,7 +15,7 @@ import {
 } from "../../components/utils"
 import { Container, InfoBox, TempToggle, MapContainer } from "./styles"
 import { TempScale } from "../../types"
-import { useData } from "ap-react-hooks"
+import useData from "../../components/useData"
 import LineChart from "../../components/LineChart"
 
 function HeatTracker() {
