@@ -24,10 +24,6 @@ export const Container = styled.div`
   width: 100%;
   position: relative;
   background: ${neutralGrey};
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) 200px;
-  grid-template-columns: 100%;
-  grid-template-areas: "map" "chart";
   box-sizing: border-box;
 `
 
@@ -47,8 +43,8 @@ export const InfoBox = styled.div`
 export const TempToggle = styled.button`
   all: unset;
   ${AbsolutePos};
-  top: 16px;
-  right: 64px;
+  bottom: calc(200px - 24px);
+  right: 16px;
   background: ${neutralGrey};
   border-radius: 50%;
   z-index: 3;

@@ -6,13 +6,12 @@ import SizeLegend from "./SizeLegend"
 import { CardBackground, AbsolutePos } from "./mixins"
 
 const Container = styled.div`
-  bottom: 8px;
+  top: 8px;
   right: 8px;
   ${AbsolutePos}
   ${CardBackground}
   display: flex;
   gap: 16px;
-  backdrop-filter: blur(2px);
 
   @media (${breakpoints.mobile}) {
     bottom: 0;

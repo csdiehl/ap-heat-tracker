@@ -51,39 +51,36 @@ function HeatTracker() {
 
   return (
     <Container ref={containerRef}>
-      <MapContainer>
-        <TempToggle
-          key={tempScale}
-          onClick={() =>
-            setTempScale(
-              (prev: TempScale): TempScale =>
-                prev === "Farenheit" ? "Celsius" : "Farenheit"
-            )
-          }
+      <TempToggle
+        key={tempScale}
+        onClick={() =>
+          setTempScale(
+            (prev: TempScale): TempScale =>
+              prev === "Farenheit" ? "Celsius" : "Farenheit"
+          )
+        }
+      >
+        {tempScale === "Farenheit" ? "F" : "C"}
+      </TempToggle>
+
+      <InfoBox>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gridArea: "title",
+          }}
         >
-          {tempScale === "Farenheit" ? "F" : "C"}
-        </TempToggle>
+          <Heading2>Extreme Heat Tracker</Heading2>
+          <Tooltip boundary={containerRef.current} />
+        </div>
 
-        <InfoBox>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gridArea: "title",
-            }}
-          >
-            <Heading2>Extreme Heat Tracker</Heading2>
-            <Tooltip boundary={containerRef.current} />
-          </div>
-
-          <Heading4>
-            Updated with data from {formatDate(date[0])} to{" "}
-            {formatDate(date[1])}{" "}
-          </Heading4>
-        </InfoBox>
-        <BaseMap tempScale={tempScale} data={filteredData}></BaseMap>
-        <Legend />
-      </MapContainer>
+        <Heading4>
+          Updated with data from {formatDate(date[0])} to {formatDate(date[1])}{" "}
+        </Heading4>
+      </InfoBox>
+      <BaseMap tempScale={tempScale} data={filteredData}></BaseMap>
+      <Legend />
 
       <LineChart data={lineChartData} />
     </Container>

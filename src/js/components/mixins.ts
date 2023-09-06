@@ -1,8 +1,9 @@
 export const CardBackground = `
- background: rgba(255, 255, 255, 0.1);
+  background: rgba(18, 18, 18, 0.5);
   padding: 16px;
   border-radius: 5px;
   box-sizing: border-box;
+  backdrop-filter: blur(2px);
 `
 
 export const AbsolutePos = `

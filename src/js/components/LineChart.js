@@ -1,18 +1,22 @@
-import React, { useRef, useEffect, useState } from "react"
-import styled from "styled-components"
 import { useNodeDimensions } from "ap-react-hooks"
-import { scaleLinear, scalePoint } from "d3-scale"
 import { extent } from "d3-array"
-import { line, area } from "d3-shape"
+import { scaleLinear, scalePoint } from "d3-scale"
 import { select } from "d3-selection"
+import { area, line } from "d3-shape"
 import "d3-transition"
-import { colors } from "./settings"
+import React, { useEffect, useRef, useState } from "react"
+import styled from "styled-components"
+import { AbsolutePos, CardBackground } from "./mixins"
+import { TtHeader, colors } from "./settings"
 
 const Container = styled.div`
-  height: 100%;
-  width: 100%;
+  ${AbsolutePos}
+  ${CardBackground}
+  bottom: 0;
+  left: 8px;
+  height: 200px;
+  width: calc(100% - 16px);
   max-width: 1300px;
-  background: none;
   grid-area: chart;
   display: grid;
   grid-template-rows: 20px minmax(0, 1fr);
@@ -40,6 +44,10 @@ const Area = styled.path`
 const BaseLine = styled.line`
   stroke: lightgrey;
   stroke-dasharray: 2 2;
+`
+
+const GridLine = styled.line`
+  stroke: #555;
 `
 
 const Button = styled.button`
@@ -143,42 +151,45 @@ const LineChart = ({ data }) => {
         .duration(750)
         .attr("d", lineGenerator(lastYearDiff))
 
-      svg.selectAll("#background-area").attr("d", area2(chartData))
+      svg
+        .selectAll("#background-area")
+        .transition()
+        .duration(750)
+        .attr("d", area2(chartData))
 
       svg
         .selectAll("#year-over-year-positive")
         .transition()
         .duration(750)
-        .attr(
-          "d",
-          areaGenerator(
-            chartData.map((d, i) =>
-              d >= lastYearDiff[i] ? d : lastYearDiff[i]
-            )
-          )
-        )
+        .attr("d", areaGenerator(chartData))
 
       svg
-        .selectAll("#chart-base-line")
+        .selectAll(".grid-line")
+        .data([0, 0.5, 1])
         .attr("x1", margin.left)
         .attr("x2", width - margin.right)
-        .attr("y1", yScale(0))
-        .attr("y2", yScale(0))
+        .attr("y1", (d) => yScale(d))
+        .attr("y2", (d) => yScale(d))
     }
   }, [data, width, height, timeFrame])
 
   return (
     <Container>
-      <div>
-        {timePeriods.map((d) => (
-          <Button
-            active={d === timeFrame}
-            key={d}
-            onClick={() => setTimeFrame(d)}
-          >
-            {d.replace("_", " ")}
-          </Button>
-        ))}
+      <div
+        style={{ display: "flex", gap: "16px", justifyContent: "flex-start" }}
+      >
+        <TtHeader>2-meter air temperature anomaly</TtHeader>
+        <div>
+          {timePeriods.map((d) => (
+            <Button
+              active={d === timeFrame}
+              key={d}
+              onClick={() => setTimeFrame(d)}
+            >
+              {d.replace("_", " ")}
+            </Button>
+          ))}
+        </div>
       </div>
       <ChartWrapper ref={node}>
         <svg width={width} height={height} ref={svgRef}>
@@ -193,14 +204,16 @@ const LineChart = ({ data }) => {
             fill="url(#gradient1)"
             id="background-area"
           ></path>
+          <BaseLine id="chart-base-line" className="grid-line"></BaseLine>
+          <GridLine className="grid-line"></GridLine>
+          <GridLine className="grid-line"></GridLine>
           <Area color="white" id="year-over-year-positive"></Area>
           <MainLine color="#555" id="secondary-line"></MainLine>
           <MainLine color={colors[3]} id="chart-main-line"></MainLine>
           <text id="main-line-text"></text>
           <text id="last-year-line-tex"></text>
           <text id="baseline-text"></text>
-
-          <BaseLine id="chart-base-line"></BaseLine>
+          <text className="axis-label">Baseline 1979 - 2000</text>
         </svg>
       </ChartWrapper>
     </Container>
