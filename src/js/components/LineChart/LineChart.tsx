@@ -1,24 +1,26 @@
+import Dropdown from "./Dropdown"
 import { useNodeDimensions } from "ap-react-hooks"
 import { extent } from "d3-array"
 import { scaleLinear, scalePoint } from "d3-scale"
 import { select } from "d3-selection"
 import "d3-transition"
 import React, { useEffect, useMemo, useRef, useState } from "react"
+import { ReanalyzerDataEntry, TempScale } from "../../types"
 import { TtHeader, colors } from "../settings"
+import { FtoCdelta } from "../utils"
+import ButtonSet from "./ButtonSet"
 import drawChart from "./drawChart"
 import {
   Area,
   BaseLine,
-  Button,
   ChartWrapper,
   Container,
   GridLine,
+  Header,
   Label,
   MainLine,
 } from "./styles"
 import { formatData, sliceDataByTime } from "./utils"
-import { FtoCdelta } from "../utils"
-import { ReanalyzerDataEntry, TempScale } from "../../types"
 
 export interface Margin {
   bottom: number
@@ -28,7 +30,6 @@ export interface Margin {
 }
 
 const margin: Margin = { bottom: 20, top: 16, right: 0, left: 16 }
-const timePeriods = ["year", "6_months", "3_months", "1_month"]
 
 interface LineChartProps {
   tempScale: TempScale
@@ -75,22 +76,14 @@ const LineChart = ({ tempScale, data }: LineChartProps) => {
 
   return (
     <Container>
-      <div
-        style={{ display: "flex", gap: "16px", justifyContent: "flex-start" }}
-      >
+      <Header>
         <TtHeader>Global air temperature change from normal</TtHeader>
-        <div>
-          {timePeriods.map((d) => (
-            <Button
-              active={d === timeFrame}
-              key={d}
-              onClick={() => setTimeFrame(d)}
-            >
-              {d.replace("_", " ")}
-            </Button>
-          ))}
-        </div>
-      </div>
+        {width <= 600 ? (
+          <Dropdown timeFrame={timeFrame} setTimeFrame={setTimeFrame} />
+        ) : (
+          <ButtonSet timeFrame={timeFrame} setTimeFrame={setTimeFrame} />
+        )}
+      </Header>
       <ChartWrapper ref={node}>
         <svg width={width} height={height} ref={svgRef}>
           <defs>

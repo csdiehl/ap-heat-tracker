@@ -77,6 +77,11 @@ export const TtHeader = styled.h3`
   ${typography.ttHeaderStyles}
   margin: 4px 0px;
   color: #fff;
+
+  @media (max-width: 425px) {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
 `
 
 export const Note = styled.p`

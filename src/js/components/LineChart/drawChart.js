@@ -71,7 +71,13 @@ export default function drawChart(
     .attr("y", (d) => yScale(d))
 
   const tickSpacing =
-    timeFrame === "year" ? 20 : timeFrame === "6_months" ? 10 : 5
+    width <= 425
+      ? 40
+      : timeFrame === "year"
+      ? 20
+      : timeFrame === "6_months"
+      ? 10
+      : 5
   const xAxis = axisBottom(xScale).tickValues(
     xScale.domain().filter((d, i) => i % tickSpacing == 0)
   )

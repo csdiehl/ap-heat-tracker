@@ -13,6 +13,11 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 20px minmax(0, 1fr);
   grid-template-columns: 100%;
+
+  @media (max-width: 425px) {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
 `
 
 const ChartWrapper = styled.div`
@@ -66,6 +71,18 @@ const Label = styled.text`
   paint-order: stroke fill;
 `
 
+const Header = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+  align-items: center;
+
+  @media (max-width: 425px) {
+    gap: 8px;
+    text-wrap: balance;
+  }
+`
+
 export {
   Label,
   ChartWrapper,
@@ -75,4 +92,5 @@ export {
   BaseLine,
   Button,
   GridLine,
+  Header,
 }
