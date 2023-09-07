@@ -23,7 +23,7 @@ const Button = styled.button`
   color: #fff;
   background-color: #181818;
   border-radius: 5px;
-  padding: 8px;
+  padding: 2px 8px;
   font-size: 0.75rem;
   box-sizing: border-box;
   display: flex;

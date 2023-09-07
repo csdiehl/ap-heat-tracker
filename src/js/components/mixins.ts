@@ -4,6 +4,10 @@ export const CardBackground = `
   border-radius: 5px;
   box-sizing: border-box;
   backdrop-filter: blur(2px);
+
+  @media(max-width: 425px) {
+    padding: 8px;
+  }
 `
 
 export const AbsolutePos = `

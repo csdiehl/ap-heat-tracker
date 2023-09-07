@@ -64,23 +64,26 @@ function HeatTracker() {
       </TempToggle>
 
       <InfoBox>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gridArea: "title",
-          }}
-        >
-          <Heading2>Extreme Heat Tracker</Heading2>
-          <Tooltip boundary={containerRef.current} />
+        <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Heading2>Extreme Heat Tracker</Heading2>
+            <Tooltip boundary={containerRef.current} />
+          </div>
+
+          <Heading4>
+            Updated with data from {formatDate(date[0])} to{" "}
+            {formatDate(date[1])}{" "}
+          </Heading4>
         </div>
 
-        <Heading4>
-          Updated with data from {formatDate(date[0])} to {formatDate(date[1])}{" "}
-        </Heading4>
+        <Legend />
       </InfoBox>
       <BaseMap tempScale={tempScale} data={filteredData}></BaseMap>
-      <Legend />
 
       <LineChart tempScale={tempScale} data={lineChartData} />
     </Container>

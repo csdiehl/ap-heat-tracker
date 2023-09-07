@@ -1,14 +1,10 @@
 import React from "react"
-import { Heading3, LabelRegular, TtHeader, colors } from "./settings"
 import styled from "styled-components"
-import { SmallCaps, breakpoints } from "./settings"
 import SizeLegend from "./SizeLegend"
-import { CardBackground, AbsolutePos } from "./mixins"
+import { CardBackground } from "./mixins"
+import { LabelRegular, TtHeader, breakpoints, colors } from "./settings"
 
 const Container = styled.div`
-  top: 8px;
-  right: 8px;
-  ${AbsolutePos}
   ${CardBackground}
   display: flex;
   gap: 16px;
@@ -37,7 +33,7 @@ const Legend = () => {
   return (
     <Container>
       <div style={{ maxWidth: "200px" }}>
-        <TtHeader>Difference from 1991-2020 Temperature Normal</TtHeader>
+        <TtHeader>Difference from 1991-2020 Normal</TtHeader>
         <Colors>
           {colors.map((c) => (
             <Patch key={c} color={c}></Patch>

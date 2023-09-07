@@ -42,7 +42,7 @@ function Index() {
             dignissim porta.
           </p>
         </BodyText>
-        <Graphic wide>
+        <Graphic fluid>
           <HeatTracker />
         </Graphic>
         <BodyText>

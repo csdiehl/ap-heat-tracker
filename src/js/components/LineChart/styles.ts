@@ -5,9 +5,9 @@ const Container = styled.div`
   ${AbsolutePos}
   ${CardBackground}
   bottom: 0;
-  left: 8px;
+  left: 0;
   height: 200px;
-  width: calc(100% - 16px);
+  width: 100%;
   max-width: 1300px;
   grid-area: chart;
   display: grid;

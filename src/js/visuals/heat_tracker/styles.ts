@@ -18,13 +18,14 @@ const spin = keyframes`
 `
 
 export const Container = styled.div`
-  padding: 8px;
   border-radius: 5px;
   height: ${totalHeight};
   width: 100%;
+  max-width: 1300px;
   position: relative;
   background: ${neutralGrey};
   box-sizing: border-box;
+  margin: 0 auto;
 `
 
 export const MapContainer = styled.div`
@@ -34,10 +35,20 @@ export const MapContainer = styled.div`
 
 export const InfoBox = styled.div`
   ${AbsolutePos};
-  top: 16px;
-  left: 16px;
+  top: 0;
+  left: 0;
   grid-area: title;
   padding: 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
 `
 
 export const TempToggle = styled.button`
@@ -58,4 +69,10 @@ export const TempToggle = styled.button`
   font-size: 1.5rem;
   font-weight: bold;
   animation: ${spin} 500ms ease-in-out;
+
+  @media (max-width: 425px) {
+    right: 8px;
+    height: 44px;
+    width: 44px;
+  }
 `

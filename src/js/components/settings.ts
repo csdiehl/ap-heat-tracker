@@ -66,6 +66,7 @@ export const Heading3 = styled(typography.Heading3)``
 export const Heading4 = styled(typography.Heading4)`
   margin: 0;
   color: lightgrey;
+  text-wrap: balance;
 `
 
 export const SmallCaps = styled(typography.SmallCaps)`
