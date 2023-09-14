@@ -40,6 +40,7 @@ function formatData(data: ReanalyzerDataEntry[]): LineChartData[] {
   const chartData = diff.map((d, i) => ({
     day: dateFromDay(2023, i),
     diff: d,
+    temp: thisYearData[i],
     lastYear: lastYearDiff[i],
   }))
 

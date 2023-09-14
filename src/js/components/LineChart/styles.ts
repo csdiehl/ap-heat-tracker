@@ -83,6 +83,26 @@ const Header = styled.div`
   }
 `
 
+const Tooltip = styled.div`
+  position: absolute;
+  color: #fff;
+  background-color: rgba(18, 18, 18, 0.8);
+  padding: 8px;
+  border: rgb(20, 20, 20) solid grey;
+  pointer-events: none;
+  border-radius: 5px;
+
+  > p {
+    margin: 0;
+    font-size: 0.75rem;
+  }
+
+  & p:first-child {
+    font-weight: bold;
+    font-size: 0.875rem;
+  }
+`
+
 export {
   Label,
   ChartWrapper,
@@ -93,4 +113,5 @@ export {
   Button,
   GridLine,
   Header,
+  Tooltip,
 }

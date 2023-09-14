@@ -19,6 +19,7 @@ import {
   Header,
   Label,
   MainLine,
+  Tooltip,
 } from "./styles"
 import { formatData, sliceDataByTime } from "./utils"
 
@@ -46,6 +47,7 @@ export interface LineChartData {
 const LineChart = ({ tempScale, data }: LineChartProps) => {
   const [timeFrame, setTimeFrame] = useState("year")
   const svgRef = useRef()
+  const tooltipRef = useRef()
   const [node, dimensions] = useNodeDimensions()
   const { width, height } = dimensions
 
@@ -59,6 +61,7 @@ const LineChart = ({ tempScale, data }: LineChartProps) => {
   useEffect(() => {
     if (chartData) {
       const svg = select(svgRef.current)
+      const tooltip = select(tooltipRef.current)
 
       const dataExtent = extent(formattedData, (d) => d.diff)
       const days = chartData.map((d) => d.day)
@@ -70,7 +73,16 @@ const LineChart = ({ tempScale, data }: LineChartProps) => {
         .domain(days)
         .range([margin.left, width - margin.right])
 
-      drawChart(svg, chartData, margin, width, timeFrame, xScale, yScale)
+      drawChart(
+        svg,
+        chartData,
+        margin,
+        width,
+        timeFrame,
+        xScale,
+        yScale,
+        tooltip
+      )
     }
   }, [chartData, width, height, timeFrame])
 
@@ -134,6 +146,10 @@ const LineChart = ({ tempScale, data }: LineChartProps) => {
             id="x-axis"
           ></g>
         </svg>
+        <Tooltip ref={tooltipRef} id="tooltip">
+          <p className="temp"></p>
+          <p className="temp-diff"></p>
+        </Tooltip>
       </ChartWrapper>
     </Container>
   )
