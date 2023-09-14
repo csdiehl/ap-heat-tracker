@@ -34,12 +34,18 @@ const Button = styled.button`
 
 const timePeriods = ["year", "6_months", "3_months", "1_month"]
 
-const Dropdown = ({ timeFrame, setTimeFrame }) => {
+interface DropdownProps {
+  timeFrame: string
+  setTimeFrame: (time: string) => void
+}
+
+const Dropdown = ({ timeFrame, setTimeFrame }: DropdownProps) => {
+  const formatLabel = (str: string) => str.replace("_", " ")
   return (
     <Root>
       <Trigger asChild>
         <Button className="IconButton" aria-label="Customise options">
-          {timeFrame.replace("_", " ")}
+          {formatLabel(timeFrame)}
         </Button>
       </Trigger>
 
@@ -47,8 +53,8 @@ const Dropdown = ({ timeFrame, setTimeFrame }) => {
         <StyledContent className="DropdownMenuContent" sideOffset={5}>
           <RadioGroup value={timeFrame} onValueChange={setTimeFrame}>
             {timePeriods.map((d) => (
-              <RadioItem key={d} value={d} on className="DropdownMenuItem">
-                {d}
+              <RadioItem key={d} value={d} className="DropdownMenuItem">
+                {formatLabel(d)}
               </RadioItem>
             ))}
           </RadioGroup>
