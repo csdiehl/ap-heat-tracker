@@ -22,6 +22,7 @@ import {
   Tooltip,
 } from "./styles"
 import { formatData, sliceDataByTime } from "./utils"
+import drawTooltip from "./drawTooltip"
 
 export interface Margin {
   bottom: number
@@ -73,18 +74,19 @@ const LineChart = ({ tempScale, data }: LineChartProps) => {
         .domain(days)
         .range([margin.left, width - margin.right])
 
-      drawChart(
+      drawChart(svg, chartData, margin, width, timeFrame, xScale, yScale)
+      drawTooltip(
         svg,
         chartData,
-        margin,
-        width,
-        timeFrame,
         xScale,
         yScale,
-        tooltip
+        margin,
+        width,
+        tooltip,
+        tempScale
       )
     }
-  }, [chartData, width, height, timeFrame])
+  }, [chartData, width, height, timeFrame, tempScale])
 
   return (
     <Container>
