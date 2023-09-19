@@ -1,4 +1,4 @@
-import React from "react"
+import React, { SetStateAction } from "react"
 import styled from "styled-components"
 import SizeLegend from "./SizeLegend"
 import { CardBackground } from "./mixins"
@@ -6,8 +6,6 @@ import { LabelRegular, TtHeader, breakpoints, colors } from "./settings"
 
 const Container = styled.div`
   ${CardBackground}
-  display: flex;
-  gap: 16px;
 
   @media (${breakpoints.mobile}) {
     bottom: 0;
@@ -29,28 +27,68 @@ const Patch = styled.div`
   border-radius: 2px;
 `
 
-const Legend = () => {
+const Legend = ({ setActiveLayers }: { setActiveLayers: any }) => {
   return (
     <Container>
-      <div style={{ maxWidth: "200px" }}>
-        <TtHeader>Difference from 1991-2020 Normal</TtHeader>
-        <Colors>
-          {colors.map((c) => (
-            <Patch key={c} color={c}></Patch>
-          ))}
-        </Colors>
-        <LabelRegular style={{ margin: "4px 0px" }}>
-          Neutral → Warmer
-        </LabelRegular>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: "8px",
-          }}
-        ></div>
+      <div style={{ display: "flex", gap: "16px" }}>
+        <div style={{ maxWidth: "200px" }}>
+          <TtHeader>Difference from 1991-2020 Normal</TtHeader>
+          <Colors>
+            {colors.map((c) => (
+              <Patch key={c} color={c}></Patch>
+            ))}
+          </Colors>
+          <LabelRegular style={{ margin: "4px 0px" }}>
+            Neutral → Warmer
+          </LabelRegular>
+        </div>
+        <SizeLegend />
       </div>
-      <SizeLegend />
+      <div
+        style={{
+          marginTop: "16px",
+          display: "flex",
+          gap: "8px",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src="./heat_tracker_raster.png"
+          style={{
+            borderRadius: "5px",
+            boxShadow: "0 0 5px #121212",
+            cursor: "pointer",
+          }}
+          width="32px"
+          height="32px"
+          onClick={() =>
+            setActiveLayers((prev: string[]) =>
+              prev.includes("raster")
+                ? prev.filter((d) => d !== "raster")
+                : [...prev, "raster"]
+            )
+          }
+        ></img>
+        <LabelRegular>2-meter air temperature</LabelRegular>
+        <img
+          src="./heat_tracker_cities.png"
+          style={{
+            borderRadius: "5px",
+            boxShadow: "0 0 5px #121212",
+            cursor: "pointer",
+          }}
+          width="32px"
+          height="32px"
+          onClick={() =>
+            setActiveLayers((prev: string[]) =>
+              prev.includes("point")
+                ? prev.filter((d) => d !== "point")
+                : [...prev, "point"]
+            )
+          }
+        ></img>
+        <LabelRegular>Weather Station data</LabelRegular>
+      </div>
     </Container>
   )
 }

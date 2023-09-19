@@ -91,7 +91,7 @@ export const heatTiles: RasterLayer = {
   source: "heat-tiles-data",
   paint: {
     "raster-opacity": 0.5,
-    "raster-contrast": 0.5,
+    "raster-contrast": 0.3,
     "raster-fade-duration": 200,
   },
 }

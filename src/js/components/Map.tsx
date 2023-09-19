@@ -11,9 +11,10 @@ import { TempScale } from "../types"
 interface MapProps {
   data: any
   tempScale: TempScale
+  activeLayers: string[]
 }
 
-function BaseMap({ data, tempScale }: MapProps) {
+function BaseMap({ data, tempScale, activeLayers }: MapProps) {
   const mapRef = useRef()
   const [popupInfo, setPopupInfo] = useState(null)
   // const latestTemp = stations && stations[stations.length - 1]
@@ -48,7 +49,14 @@ function BaseMap({ data, tempScale }: MapProps) {
           minzoom={0}
           maxzoom={4}
         >
-          <Layer minzoom={0} maxzoom={4} {...heatTiles} />
+          <Layer
+            layout={{
+              visibility: activeLayers.includes("raster") ? "visible" : "none",
+            }}
+            minzoom={0}
+            maxzoom={4}
+            {...heatTiles}
+          />
         </Source>
         <Source
           id="city-data"
@@ -60,9 +68,24 @@ function BaseMap({ data, tempScale }: MapProps) {
           clusterMinPoints={5}
           clusterProperties={{ "avg_diff": ["+", ["get", "diff"]] }}
         >
-          <Layer {...cities}></Layer>
-          <Layer {...clusteredCities}></Layer>
-          <Layer {...clusterCounts}></Layer>
+          <Layer
+            layout={{
+              visibility: activeLayers.includes("point") ? "visible" : "none",
+            }}
+            {...cities}
+          ></Layer>
+          <Layer
+            layout={{
+              visibility: activeLayers.includes("point") ? "visible" : "none",
+            }}
+            {...clusteredCities}
+          ></Layer>
+          <Layer
+            layout={{
+              visibility: activeLayers.includes("point") ? "visible" : "none",
+            }}
+            {...clusterCounts}
+          ></Layer>
         </Source>
         {popupInfo && (
           <Popup

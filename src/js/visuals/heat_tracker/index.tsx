@@ -23,6 +23,7 @@ function HeatTracker() {
   const containerRef = useRef()
   const [data, setData] = useState(null)
   const [tempScale, setTempScale] = useState<TempScale>("Farenheit")
+  const [activeLayers, setActiveLayers] = useState(["raster", "point"])
   const lineChartData = useData(
     "https://climatereanalyzer.org/clim/t2_daily/json/cfsr_world_t2_day.json"
   )
@@ -81,9 +82,13 @@ function HeatTracker() {
           </Heading4>
         </div>
 
-        <Legend />
+        <Legend setActiveLayers={setActiveLayers} />
       </InfoBox>
-      <BaseMap tempScale={tempScale} data={filteredData}></BaseMap>
+      <BaseMap
+        activeLayers={activeLayers}
+        tempScale={tempScale}
+        data={filteredData}
+      ></BaseMap>
 
       <LineChart tempScale={tempScale} data={lineChartData} />
     </Container>
