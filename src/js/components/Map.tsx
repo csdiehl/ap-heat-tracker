@@ -1,8 +1,14 @@
 import maplibre from "maplibre-gl"
 import { MapLayerMouseEvent } from "mapbox-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
-import React, { ReactComponentElement, useRef, useState } from "react"
-import Map, { Layer, NavigationControl, Popup, Source } from "react-map-gl"
+import React, { useRef, useState } from "react"
+import Map, {
+  Layer,
+  MapRef,
+  NavigationControl,
+  Popup,
+  Source,
+} from "react-map-gl"
 import { cities, clusterCounts, clusteredCities, heatTiles } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth, tilesLink } from "./settings"
 import FormattedPopup from "./FormattedPopup"
@@ -15,16 +21,34 @@ interface MapProps {
 }
 
 function BaseMap({ data, tempScale, activeLayers }: MapProps) {
-  const mapRef = useRef()
+  const mapRef = useRef<MapRef>()
   const [popupInfo, setPopupInfo] = useState(null)
   // const latestTemp = stations && stations[stations.length - 1]
 
-  function handleMapClick(event: MapLayerMouseEvent) {
+  function handleMapHover(event: MapLayerMouseEvent) {
     if (!event?.features || event.features.length === 0) return
     const data = event?.features[0]?.properties
     if (data?.diff && event?.features[0]?.geometry?.type === "Point") {
       const coords = event?.features[0]?.geometry?.coordinates ?? []
       setPopupInfo({ ...data, lon: coords[0], lat: coords[1] })
+    }
+  }
+
+  function handleMapClick(event: MapLayerMouseEvent) {
+    if (!event?.features || event.features.length === 0) return
+    const feature = event.features[0]
+
+    if (feature) {
+      const layer = feature.layer.id
+
+      if (layer === "clusters" && feature?.geometry?.type === "Point") {
+        const { current: map } = mapRef
+        map.flyTo({
+          center: feature.geometry.coordinates as [number, number],
+          zoom: 6,
+          essential: true,
+        })
+      }
     }
   }
 
@@ -35,9 +59,10 @@ function BaseMap({ data, tempScale, activeLayers }: MapProps) {
         attributionControl={false}
         ref={mapRef}
         initialViewState={initialViewState}
-        onMouseMove={handleMapClick}
+        onClick={handleMapClick}
+        onMouseMove={handleMapHover}
         onMouseLeave={() => setPopupInfo(null)}
-        interactiveLayerIds={["cities"]}
+        interactiveLayerIds={["cities", "clusters"]}
         mapStyle={`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${styleEnum}?type=style&token=AAPK607d6ebb8ce04a1a9fc5e06c1b80cf4aoVSN2GntWaa8EnGF8MNnFz_3vax7S1HODpwDAlFvelNGDk8JIFYk_Db6OH9ccx-T`}
       >
         <Source
@@ -79,12 +104,6 @@ function BaseMap({ data, tempScale, activeLayers }: MapProps) {
               visibility: activeLayers.includes("point") ? "visible" : "none",
             }}
             {...clusteredCities}
-          ></Layer>
-          <Layer
-            layout={{
-              visibility: activeLayers.includes("point") ? "visible" : "none",
-            }}
-            {...clusterCounts}
           ></Layer>
         </Source>
         {popupInfo && (

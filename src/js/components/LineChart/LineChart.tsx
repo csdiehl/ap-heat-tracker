@@ -32,6 +32,7 @@ export interface Margin {
 }
 
 const margin: Margin = { bottom: 20, top: 16, right: 0, left: 16 }
+const mainColor = "#FF447D"
 
 interface LineChartProps {
   tempScale: TempScale
@@ -117,15 +118,15 @@ const LineChart = ({ tempScale, data }: LineChartProps) => {
           <GridLine className="grid-line"></GridLine>
           <GridLine className="grid-line"></GridLine>
 
-          <Area color="white" id="year-over-year-positive"></Area>
+          <Area color={mainColor} id="year-over-year-positive"></Area>
           <MainLine color="#999" id="secondary-line"></MainLine>
-          <MainLine color={"white"} id="chart-main-line"></MainLine>
+          <MainLine color={mainColor} id="chart-main-line"></MainLine>
 
           <Label x={0} y={height - margin.bottom} className="axis-label">
             Baseline 1979 - 2000
           </Label>
 
-          <Label x={0} className="y-axis-label">
+          <Label color={mainColor} x={0} className="y-axis-label">
             2023
           </Label>
 
