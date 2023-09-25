@@ -9,7 +9,7 @@ import Map, {
   Popup,
   Source,
 } from "react-map-gl"
-import { cities, clusterCounts, clusteredCities, heatTiles } from "./MapStyles"
+import { cities, clusteredCities, heatTiles } from "./MapStyles"
 import { initialViewState, styleEnum, thisMonth, tilesLink } from "./settings"
 import FormattedPopup from "./FormattedPopup"
 import { TempScale } from "../types"
@@ -55,6 +55,11 @@ function BaseMap({ data, tempScale, activeLayers }: MapProps) {
   return (
     <>
       <Map
+        minZoom={1.5}
+        maxBounds={[
+          [-179, -85], // Southwest coordinates
+          [179, 85], // Northeast coordinates
+        ]}
         mapLib={maplibre}
         attributionControl={false}
         ref={mapRef}
