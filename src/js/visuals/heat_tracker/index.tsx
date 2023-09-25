@@ -82,7 +82,7 @@ function HeatTracker() {
           </Heading4>
         </div>
 
-        <Legend setActiveLayers={setActiveLayers} />
+        <Legend activeLayers={activeLayers} setActiveLayers={setActiveLayers} />
       </InfoBox>
       <BaseMap
         activeLayers={activeLayers}

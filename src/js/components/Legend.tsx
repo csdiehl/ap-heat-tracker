@@ -1,8 +1,9 @@
-import React, { SetStateAction } from "react"
+import React from "react"
 import styled from "styled-components"
 import SizeLegend from "./SizeLegend"
 import { CardBackground } from "./mixins"
 import { LabelRegular, TtHeader, breakpoints, colors } from "./settings"
+import Toggle from "./Switch"
 
 const Container = styled.div`
   ${CardBackground}
@@ -26,13 +27,50 @@ const Patch = styled.div`
   background-color: ${(props) => props.color};
   border-radius: 2px;
 `
+interface LegendProps {
+  activeLayers: string[]
+  setActiveLayers: any
+}
 
-const Legend = ({ setActiveLayers }: { setActiveLayers: any }) => {
+const Legend = ({ setActiveLayers, activeLayers }: LegendProps) => {
+  const LayerSelect = (layer: string): React.ReactNode => {
+    return (
+      <>
+        <img
+          src={`./heat_tracker_${layer}.png`}
+          style={{
+            borderRadius: "5px",
+            boxShadow: "0 0 5px #121212",
+          }}
+          width="32px"
+          height="32px"
+        ></img>
+        <div>
+          <LabelRegular style={{ marginBottom: "8px" }}>
+            2-meter air temperature
+          </LabelRegular>
+          <Toggle
+            setLayer={() =>
+              setActiveLayers((prev: string[]) =>
+                prev.includes(layer)
+                  ? prev.filter((d) => d !== layer)
+                  : [...prev, layer]
+              )
+            }
+            checked={activeLayers.includes(layer)}
+          />
+        </div>
+      </>
+    )
+  }
+
   return (
     <Container>
       <div style={{ display: "flex", gap: "16px" }}>
-        <div style={{ maxWidth: "200px" }}>
-          <TtHeader>Difference from 1991-2020 Normal</TtHeader>
+        <div style={{ maxWidth: "300px" }}>
+          <TtHeader style={{ marginBottom: "8px" }}>
+            Change from 1991-2020 normal
+          </TtHeader>
           <Colors>
             {colors.map((c) => (
               <Patch key={c} color={c}></Patch>
@@ -52,42 +90,8 @@ const Legend = ({ setActiveLayers }: { setActiveLayers: any }) => {
           alignItems: "center",
         }}
       >
-        <img
-          src="./heat_tracker_raster.png"
-          style={{
-            borderRadius: "5px",
-            boxShadow: "0 0 5px #121212",
-            cursor: "pointer",
-          }}
-          width="32px"
-          height="32px"
-          onClick={() =>
-            setActiveLayers((prev: string[]) =>
-              prev.includes("raster")
-                ? prev.filter((d) => d !== "raster")
-                : [...prev, "raster"]
-            )
-          }
-        ></img>
-        <LabelRegular>2-meter air temperature</LabelRegular>
-        <img
-          src="./heat_tracker_cities.png"
-          style={{
-            borderRadius: "5px",
-            boxShadow: "0 0 5px #121212",
-            cursor: "pointer",
-          }}
-          width="32px"
-          height="32px"
-          onClick={() =>
-            setActiveLayers((prev: string[]) =>
-              prev.includes("point")
-                ? prev.filter((d) => d !== "point")
-                : [...prev, "point"]
-            )
-          }
-        ></img>
-        <LabelRegular>Weather Station data</LabelRegular>
+        {LayerSelect("raster")}
+        {LayerSelect("point")}
       </div>
     </Container>
   )

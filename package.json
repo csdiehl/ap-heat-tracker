@@ -62,6 +62,7 @@
     "@apdata/core": "^0.1.0",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-popover": "^1.0.6",
+    "@radix-ui/react-switch": "^1.0.3",
     "@types/d3": "^7.4.0",
     "@types/react": "^18.2.21",
     "@types/styled-components": "^5.1.26",
