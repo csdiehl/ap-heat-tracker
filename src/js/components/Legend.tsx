@@ -33,7 +33,7 @@ interface LegendProps {
 }
 
 const Legend = ({ setActiveLayers, activeLayers }: LegendProps) => {
-  const LayerSelect = (layer: string): React.ReactNode => {
+  const LayerSelect = (layer: string, label: string): React.ReactNode => {
     return (
       <>
         <img
@@ -46,9 +46,7 @@ const Legend = ({ setActiveLayers, activeLayers }: LegendProps) => {
           height="32px"
         ></img>
         <div>
-          <LabelRegular style={{ marginBottom: "8px" }}>
-            2-meter air temperature
-          </LabelRegular>
+          <LabelRegular style={{ marginBottom: "8px" }}>{label}</LabelRegular>
           <Toggle
             setLayer={() =>
               setActiveLayers((prev: string[]) =>
@@ -90,8 +88,8 @@ const Legend = ({ setActiveLayers, activeLayers }: LegendProps) => {
           alignItems: "center",
         }}
       >
-        {LayerSelect("raster")}
-        {LayerSelect("point")}
+        {LayerSelect("raster", "2-meter air temperature")}
+        {LayerSelect("point", "Weather station reading")}
       </div>
     </Container>
   )

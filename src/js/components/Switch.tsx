@@ -2,7 +2,7 @@ import React from "react"
 import * as Switch from "@radix-ui/react-switch"
 import styled from "styled-components"
 
-const red = "red"
+const red = "#65151D"
 
 interface props {
   setLayer: () => void
